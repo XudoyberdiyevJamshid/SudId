@@ -1,0 +1,61 @@
+<!-- Hidden slot for g-option children -->
+<ng-content/>
+
+<div tabindex="0" [class]="selectClasses()" [style.width]="selectWidth() || null">
+  <button
+    class="g-select__trigger"
+    type="button"
+    [attr.aria-disabled]="disabled()"
+    [attr.aria-expanded]="isOpen()"
+    [attr.aria-haspopup]="'listbox'"
+    [disabled]="disabled()"
+    [style.background]="bgColor() || null"
+    [style.color]="textColor() || null"
+    (click)="toggleDropdown()">
+    <!-- Icon area -->
+    @if (displayIcon()) {
+      <span class="g-select__icon">
+        <g-icon [color]="resolvedIconColor()" [name]="displayIcon()!" [size]="iconSize()"/>
+      </span>
+    }
+
+    <!-- Label -->
+    <span class="g-select__label" [class.g-select__label--placeholder]="!hasSelection()"
+          [style.color]="resolvedLabelColor()">
+      {{ displayLabel() }}
+    </span>
+
+    <!-- Chevron indicator -->
+    <span class="g-select__chevron" [class.g-select__chevron--rotated]="isOpen()"
+          [style.color]="resolvedChevronColor()">
+      <g-icon [color]="'currentColor'" [name]="'chevron-down'" [size]="'16px'"/>
+    </span>
+  </button>
+
+  <!-- Dropdown menu -->
+  @if (isOpen()) {
+    <div #dropdown class="g-select__dropdown" role="listbox"
+         [style.background]="bgColor() || null"
+         [style.color]="textColor() || null">
+      @for (option of options(); track option.value) {
+        <button
+          class="g-select__option"
+          role="option"
+          type="button"
+          [attr.aria-selected]="isSelected(option)"
+          [class.g-select__option--selected]="isSelected(option)"
+          (click)="selectOption(option)">
+          @if (option.icon) {
+            <span class="g-select__option-icon">
+              <g-icon [color]="'currentColor'" [name]="option.icon" [size]="'24px'"/>
+            </span>
+          }
+          <span class="g-select__option-label">{{ option.label }}</span>
+          @if (isSelected(option)) {
+            <span class="g-select__option-checkmark">✓</span>
+          }
+        </button>
+      }
+    </div>
+  }
+</div>

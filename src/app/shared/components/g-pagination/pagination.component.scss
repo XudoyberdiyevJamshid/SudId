@@ -1,0 +1,41 @@
+// Base styles for page number buttons
+@reference "tailwindcss";
+
+.page-button {
+  @apply flex items-center justify-center w-10 h-10 rounded-full font-medium;
+  @apply bg-transparent;
+  @apply transition-all duration-200 ease-in-out;
+  @apply cursor-pointer;
+  @apply w-12 h-12;
+
+  // Use CSS custom properties for dynamic colors
+  color: var(--default-text-color, #374151);
+
+  // Hover state for inactive buttons
+  &:hover:not(.page-active) {
+    background-color: var(--hover-bg-color, #f3f4f6);
+    @apply text-white;
+    transform: scale(1.05);
+  }
+
+  // Active/selected page button
+  &.page-active {
+    @apply shadow-md;
+    background-color: var(--active-bg-color, #3f9e83);
+    color: var(--active-text-color, white);
+    cursor: default;
+
+
+    // No hover effect on active button
+    &:hover {
+      background-color: var(--active-bg-color, #3f9e83);
+      transform: none;
+    }
+  }
+
+  // Focus state for accessibility
+  &:focus-visible {
+    @apply outline-none ring-2 ring-offset-2;
+    ring-color: var(--active-bg-color, #3f9e83);
+  }
+}

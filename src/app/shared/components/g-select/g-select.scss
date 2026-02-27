@@ -1,0 +1,279 @@
+:host {
+  display: inline-block;
+}
+
+.g-select {
+  position: relative;
+  display: inline-block;
+  min-width: 100px;
+  outline: none;
+
+  &__trigger {
+    display: flex;
+    align-items: center;
+    
+    gap: 8px;
+    padding: 12px 16px;
+    min-height: 48px;
+    width: 100%;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    position: relative;
+    overflow: hidden;
+
+    color: #ffffff;
+
+    // Glassmorphism background from SVG design
+    background: linear-gradient(
+        180deg,
+        rgba(192, 192, 192, 0.1) 0%,
+        rgba(90, 90, 90, 0.1) 48.56%,
+        rgba(192, 192, 192, 0.1) 100%
+    );
+    border: 1px solid rgba(192, 192, 192, 0.1);
+    border-radius: 24px;
+    backdrop-filter: blur(16px);
+
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    // Hover effect with glow
+    &:hover:not(:disabled) {
+      border-color: rgba(192, 192, 192, 0.2);
+      box-shadow: 0 0 20px rgba(192, 192, 192, 0.15);
+      transform: translateY(-1px);
+    }
+
+    // Active/Click effect
+    &:active:not(:disabled) {
+      transform: translateY(0) scale(0.98);
+    }
+
+    // Focus effect
+    &:focus-visible {
+      outline: 2px solid rgba(255, 255, 255, 0.3);
+      outline-offset: 2px;
+    }
+
+    // Disabled state
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+      transform: none;
+    }
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 12px;
+    flex-shrink: 0;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  &__label {
+    flex: 1;
+    text-align: left;
+    color: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &--placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+  }
+
+  &__chevron {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: inherit;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0;
+
+    &--rotated {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    max-height: 300px;
+    overflow-y: auto;
+    border-radius: 16px;
+
+    // Similar glassmorphism styling
+    background: linear-gradient(
+        180deg,
+        rgba(192, 192, 192, 0.12) 0%,
+        rgba(90, 90, 90, 0.12) 50%,
+        rgba(192, 192, 192, 0.12) 100%
+    );
+    border: 1px solid rgba(192, 192, 192, 0.15);
+    backdrop-filter: blur(24px);
+
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+
+    // Animation
+    animation: slideDown 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+    // Custom scrollbar
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 3px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 3px;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.3);
+      }
+    }
+  }
+
+  &__option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    width: 100%;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: left;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    &:focus-visible {
+      background: rgba(255, 255, 255, 0.15);
+      outline: 2px solid rgba(255, 255, 255, 0.3);
+      outline-offset: -2px;
+    }
+
+    &--selected {
+      background: rgba(255, 255, 255, 0.08);
+      font-weight: 600;
+    }
+
+    &:first-child {
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+    }
+
+    &:last-child {
+      border-bottom-left-radius: 16px;
+      border-bottom-right-radius: 16px;
+    }
+  }
+
+  &__option-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 12px;
+    flex-shrink: 0;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  &__option-label {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__option-checkmark {
+    flex-shrink: 0;
+    color: inherit;
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  // Custom background variant
+  &--custom-bg {
+    .g-select__trigger {
+      overflow: visible;
+    }
+
+    .g-select__icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      align-self: center;
+      width: auto;
+      height: auto;
+      border-radius: 0;
+      overflow: visible;
+      background: none;
+    }
+
+    .g-select__dropdown {
+      border-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .g-select__option {
+      &:hover {
+        background: rgba(0, 0, 0, 0.06);
+      }
+
+      &:focus-visible {
+        background: rgba(0, 0, 0, 0.08);
+      }
+
+      &--selected {
+        background: rgba(0, 0, 0, 0.06);
+      }
+    }
+  }
+
+  // States
+  &--disabled {
+    pointer-events: none;
+  }
+
+  &--open {
+    .g-select__trigger {
+      border-color: rgba(192, 192, 192, 0.25);
+      box-shadow: 0 0 20px rgba(192, 192, 192, 0.2);
+    }
+  }
+}
+
+// Dropdown slide-down animation
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

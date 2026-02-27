@@ -1,0 +1,40 @@
+:host {
+  display: block;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.breadcrumb-item {
+  color: var(--breadcrumb-color, white);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.breadcrumb-item-current {
+  opacity: 0.5;
+  cursor: default;
+
+  &:hover {
+    opacity: 0.5;
+  }
+}
+
+.separator {
+  flex-shrink: 0;
+}
+
+.separator-muted {
+  opacity: 0.5;
+}
