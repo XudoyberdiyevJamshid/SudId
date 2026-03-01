@@ -1,0 +1,27 @@
+<div>
+  <div class="flex gap-4 items-center text-4xl font-bold">
+    
+    <p
+      class="cursor-pointer  transition-opacity duration-200"
+      [class.text-title]="currentTab() == 'login'"
+      [class.opacity-30]="currentTab() != 'login'"
+      (click)="switchTab('login')"
+    >
+      Kirish
+    </p>
+
+    <p
+      class="cursor-pointer transition-opacity duration-200"
+      [class.text-title]="currentTab() == 'register'"
+      [class.opacity-30]="currentTab() != 'register'"
+      (click)="switchTab('register')"
+    >
+      Ro’yxatdan o’tish
+    </p>
+
+  </div>
+
+  <div>
+    <app-login-form></app-login-form>
+  </div>
+</div>

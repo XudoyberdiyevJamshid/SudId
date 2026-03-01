@@ -1,5 +1,7 @@
 import {Component, signal} from '@angular/core';
 import {RouterOutlet} from '@angular/router';
+import { GIcon } from "../../shared/components/g-icon/g-icon";
+// import { GIconButton } from '../../shared/components/g-icon-button/g-icon-button';
 
 interface AuthSlide {
   image: string;
@@ -9,14 +11,24 @@ interface AuthSlide {
 
 @Component({
   selector: 'app-auth-layout',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, GIcon,],
   templateUrl: './auth-layout.html',
   styleUrl: './auth-layout.scss',
 })
 export class AuthLayout {
   readonly slides = signal<AuthSlide[]>([
     {
-      image: 'assets/images/sud-building.jpg',
+      image: '../../../assets/images/court-office.png',
+      title: 'Sud xizmatlaridan foydalanishda, ro\'yxatdanga oluvchi yagona platforma',
+      description: 'Yagona avtorizatsiya xizmati foydalanuvchilarga bir xil kirish ma\'lumotlari bilan turli xizmatlarga kirishni ta\'minlaydi. Bu xavfsizlikni oshirib, tajribani soddalashtiradi.'
+    },
+    {
+      image: '../../assets/images/slied2.jpg',
+      title: 'Sud xizmatlaridan foydalanishda, ro\'yxatdanga oluvchi yagona platforma',
+      description: 'Yagona avtorizatsiya xizmati foydalanuvchilarga bir xil kirish ma\'lumotlari bilan turli xizmatlarga kirishni ta\'minlaydi. Bu xavfsizlikni oshirib, tajribani soddalashtiradi.'
+    },
+    {
+      image: '../../assets/images/slied3.jpg',
       title: 'Sud xizmatlaridan foydalanishda, ro\'yxatdanga oluvchi yagona platforma',
       description: 'Yagona avtorizatsiya xizmati foydalanuvchilarga bir xil kirish ma\'lumotlari bilan turli xizmatlarga kirishni ta\'minlaydi. Bu xavfsizlikni oshirib, tajribani soddalashtiradi.'
     },

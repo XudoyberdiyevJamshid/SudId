@@ -1,0 +1,76 @@
+<div class="flex flex-col w-full mt-10">
+  @if (!hasEimzo()) {
+    <div>
+      <div>
+        <h3 class="text-title text-xl font-semibold">Assalomu alaykum!</h3>
+        <p class="text-subtitle mt-3 text-[0.9375rem] leading-5">
+          ID.SUD.UZ tizimiga xush kelibsiz! Barcha sud <br />
+          tizimlariga bir joyda ro’yxatdan o’ting
+        </p>
+      </div>
+      <div class="mt-4 bg-[#F9F9F9]">
+        <p class="text-subtitle text-[0.8125rem]">
+          Tizimni to‘g‘ri ishlashi uchun E-IMZO modulini yoki E-IMZO brauzerini ishga tushirishingiz
+          kerak. E-IMZO modulini o‘rnatish bo‘yicha ko‘rsatmalarni bu yerda o‘qishingiz mumkin
+          <br>
+          <br>
+          E-IMZO moduli ishga tushgan bo‘lsa, brauzerda E-IMZO hostga ulanishini tekshiring.
+        </p>
+        <button class="bg-[#253F57] text-white flex gap-3 items-center px-3 py-2 rounded-lg hover:opacity-85 active:opacity-95 transition-opacity duration-100 mt-4 "  > 
+          <g-icon name="key" color="white" size="16"></g-icon>
+          <span>E-Imzo yuklab olish</span>
+        </button>
+        
+      </div>
+    </div>
+  } @else {
+    <div >
+
+      <div class="mb-4">
+        <h3 class="text-title text-xl font-semibold">Assalomu alaykum!</h3>
+        <p class="text-subtitle mt-3 text-[0.9375rem] leading-5">
+          ID.SUD.UZ tizimiga xush kelibsiz! Barcha sud <br />
+          tizimlariga bir joyda ro’yxatdan o’ting
+        </p>
+      </div>
+
+      <g-select-new placeholder="ERI kalitini tanlang" [formControl]="eriControl">
+        @for (key of eriKeys; track key.id) {
+          <g-option-new [value]="key.id">
+            <div class="flex flex-col py-0.5">
+              <span class="font-medium text-gray-800 text-sm">{{ key.name }}</span>
+              <div class="flex items-center gap-4 text-[13px] text-gray-400 mt-1">
+                <span class="flex items-center gap-1.5">
+                  <i class="ph-user"></i> {{ key.jshshir }}
+                </span>
+                <span class="flex items-center gap-1.5">
+                  <i class="ph-calendar-blank"></i> {{ key.date }}
+                </span>
+              </div>
+            </div>
+          </g-option-new>
+        }
+      </g-select-new>
+    </div>
+
+    <button
+    [disabled]="!eriControl.value"
+      class="flex items-center justify-center relative text-[13px] gap-2 w-full h-12 mb-2 bg-[#2C8CE6]  text-white font-medium rounded-lg transition-colors hover:opacity-85 active:opacity-95  disabled:cursor-not-allowed mt-4"
+      (click)="onLogin()"
+      
+    >
+      Kirish
+     <div class="w-7 h-7 rounded-full flex justify-center items-center absolute right-5  bg-blue-400 " >
+       <g-icon name="arrow-right" size="12"></g-icon>
+     </div>
+    </button>
+  }
+
+  <button
+    (click)="refreshEimzo()"
+    class="flex items-center justify-center text-[#2C8CE6] text-sm gap-3 mt-4 w-full  py-[1.125rem] hover:bg-blue-100 rounded-lg active:bg-blue-200"
+  >
+    <g-icon name="refresh-icon" size="16"></g-icon>
+    Yangilash
+  </button>
+</div>

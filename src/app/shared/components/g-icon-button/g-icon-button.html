@@ -1,0 +1,9 @@
+<button
+  class="btn-icon"
+  [style.padding]="title() ? '12px' : '14px'"
+>
+  <g-icon [name]="iconName()" [color]="color()"></g-icon>
+  @if (title()) {
+    <span class="text-md font-semibold" [style.color]="color()">{{ title() }}</span>
+  }
+</button>

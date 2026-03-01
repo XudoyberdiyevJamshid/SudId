@@ -14,7 +14,9 @@ export default {
           700: "#2C8CE6",
           800: "#1F6FC2",
           900: "#14529E",
-        }
+        },
+        title:'#253F57',
+        subtitle:'#8196A3'
       }
     }
   },
