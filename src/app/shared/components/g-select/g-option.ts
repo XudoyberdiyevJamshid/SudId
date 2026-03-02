@@ -1,16 +1,18 @@
-import { ChangeDetectionStrategy, Component, ElementRef, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, TemplateRef, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'g-option',
   standalone: true,
-  template: '<ng-content></ng-content>',
+  // DIQQAT: ng-content ni ng-template ga o'radik
+  template: '<ng-template><ng-content></ng-content></ng-template>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     style: 'display: none',
   },
 })
 export class GOption {
-  readonly elementRef = inject(ElementRef);
-  value = input.required<string>();
-  icon = input<string>();
+  readonly value = input.required<string>();
+  readonly label = input<string>(''); // Agar kerak bo'lsa
+
+  @ViewChild(TemplateRef, { static: true }) template!: TemplateRef<any>;
 }

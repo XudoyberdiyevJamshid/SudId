@@ -1,7 +1,7 @@
-import {Component, signal} from '@angular/core';
-import {RouterOutlet} from '@angular/router';
-import { GIcon } from "../../shared/components/g-icon/g-icon";
-// import { GIconButton } from '../../shared/components/g-icon-button/g-icon-button';
+import { Component, signal } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { GIcon } from '../../shared/components/g-icon/g-icon';
+import GButton from '../../shared/components/g-button/g-button';
 
 interface AuthSlide {
   image: string;
@@ -11,7 +11,7 @@ interface AuthSlide {
 
 @Component({
   selector: 'app-auth-layout',
-  imports: [RouterOutlet, GIcon,],
+  imports: [RouterOutlet, GIcon, GButton],
   templateUrl: './auth-layout.html',
   styleUrl: './auth-layout.scss',
 })
@@ -19,29 +19,31 @@ export class AuthLayout {
   readonly slides = signal<AuthSlide[]>([
     {
       image: '../../../assets/images/court-office.png',
-      title: 'Sud xizmatlaridan foydalanishda, ro\'yxatdanga oluvchi yagona platforma',
-      description: 'Yagona avtorizatsiya xizmati foydalanuvchilarga bir xil kirish ma\'lumotlari bilan turli xizmatlarga kirishni ta\'minlaydi. Bu xavfsizlikni oshirib, tajribani soddalashtiradi.'
+      title: "Sud xizmatlaridan foydalanishda, ro'yxatdanga oluvchi yagona platforma",
+      description:
+        "Yagona avtorizatsiya xizmati foydalanuvchilarga bir xil kirish ma'lumotlari bilan turli xizmatlarga kirishni ta'minlaydi. Bu xavfsizlikni oshirib, tajribani soddalashtiradi.",
     },
     {
       image: '../../assets/images/slied2.jpg',
-      title: 'Sud xizmatlaridan foydalanishda, ro\'yxatdanga oluvchi yagona platforma',
-      description: 'Yagona avtorizatsiya xizmati foydalanuvchilarga bir xil kirish ma\'lumotlari bilan turli xizmatlarga kirishni ta\'minlaydi. Bu xavfsizlikni oshirib, tajribani soddalashtiradi.'
+      title: "Sud xizmatlaridan foydalanishda, ro'yxatdanga oluvchi yagona platforma",
+      description:
+        "Yagona avtorizatsiya xizmati foydalanuvchilarga bir xil kirish ma'lumotlari bilan turli xizmatlarga kirishni ta'minlaydi. Bu xavfsizlikni oshirib, tajribani soddalashtiradi.",
     },
     {
       image: '../../assets/images/slied3.jpg',
-      title: 'Sud xizmatlaridan foydalanishda, ro\'yxatdanga oluvchi yagona platforma',
-      description: 'Yagona avtorizatsiya xizmati foydalanuvchilarga bir xil kirish ma\'lumotlari bilan turli xizmatlarga kirishni ta\'minlaydi. Bu xavfsizlikni oshirib, tajribani soddalashtiradi.'
+      title: "Sud xizmatlaridan foydalanishda, ro'yxatdanga oluvchi yagona platforma",
+      description:
+        "Yagona avtorizatsiya xizmati foydalanuvchilarga bir xil kirish ma'lumotlari bilan turli xizmatlarga kirishni ta'minlaydi. Bu xavfsizlikni oshirib, tajribani soddalashtiradi.",
     },
-
   ]);
 
   readonly currentSlide = signal<number>(0);
 
   nextSlide() {
-    this.currentSlide.update(curr => (curr + 1) % this.slides().length);
+    this.currentSlide.update((curr) => (curr + 1) % this.slides().length);
   }
 
   prevSlide() {
-    this.currentSlide.update(curr => curr === 0 ? this.slides().length - 1 : curr - 1);
+    this.currentSlide.update((curr) => (curr === 0 ? this.slides().length - 1 : curr - 1));
   }
 }

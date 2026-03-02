@@ -4,11 +4,12 @@ import { GOptionNew } from '../../../../shared/components/g-select-new/g-option-
 import { GSelectNew } from '../../../../shared/components/g-select-new/g-select-new';
 import { GIcon } from '../../../../shared/components/g-icon/g-icon';
 import GButton from '../../../../shared/components/g-button/g-button';
+import { GSelect, GOption } from '../../../../shared/components/g-select';
 
 @Component({
   selector: 'app-login-form',
   standalone: true,
-  imports: [ReactiveFormsModule, GSelectNew, GOptionNew, GIcon, GButton],
+  imports: [ReactiveFormsModule, GIcon, GButton, GSelect, GOption],
   templateUrl: './login-form.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

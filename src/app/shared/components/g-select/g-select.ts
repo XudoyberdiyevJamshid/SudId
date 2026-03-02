@@ -8,120 +8,73 @@ import {
   HostListener,
   inject,
   input,
-  output,
   signal,
-  viewChild,
+  forwardRef,
 } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { NgClass, NgTemplateOutlet } from '@angular/common';
 import { GIcon } from '../g-icon/g-icon';
 import { GOption } from './g-option';
 
 export interface SelectOption {
   value: string;
   label: string;
-  icon?: string;
+  template: any;
 }
 
 @Component({
   selector: 'g-select',
-  imports: [GIcon],
+  standalone: true,
+  imports: [GIcon, NgClass, NgTemplateOutlet],
   templateUrl: './g-select.html',
   styleUrl: './g-select.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => GSelect),
+      multi: true,
+    },
+  ],
+  host: {
+    class: 'block w-full', // Sakrashni oldini olish uchun
+  },
 })
-export class GSelect {
+export class GSelect implements ControlValueAccessor {
   private elementRef = inject(ElementRef);
-
-  // Content children - query all g-option components
   private optionComponents = contentChildren(GOption);
 
   // Inputs
-  value = input<string>('');
-  placeholder = input<string>('Select an option');
-  disabled = input<boolean>(false);
-  customClass = input<string>('');
-  bgColor = input<string>('');
-  textColor = input<string>('');
-  icon = input<string>('');
-  iconSize = input<string>('20px');
-  iconColor = input<string>('');
-  placeholderColor = input<string>('');
-  selectWidth = input<string>('');
+  readonly placeholder = input<string>('Tanlang');
+  readonly disabled = input<boolean>(false);
+  readonly error = input<string>('');
 
-  // Outputs
-  valueChange = output<string>();
+  // CVA state
+  private onChange: (value: string) => void = () => {};
+  private onTouched: () => void = () => {};
+  private readonly disabledByForm = signal(false);
 
-  // Internal state
-  isOpen = signal<boolean>(false);
-  dropdownElement = viewChild<ElementRef>('dropdown');
+  readonly internalValue = signal<string>('');
+  readonly isOpen = signal<boolean>(false);
+  readonly isFocused = signal<boolean>(false);
 
-  // Computed properties - build options array from content children
-  options = computed<SelectOption[]>(() => {
-    return this.optionComponents().map((optionComp) => ({
-      value: optionComp.value(),
-      label: this.getOptionLabel(optionComp),
-      icon: optionComp.icon(),
+  readonly isDisabled = computed(() => this.disabled() || this.disabledByForm());
+
+  readonly options = computed<SelectOption[]>(() => {
+    return this.optionComponents().map((opt) => ({
+      value: opt.value(),
+      label: opt.label(),
+      template: opt.template,
     }));
   });
 
-  selectedOption = computed(() => {
-    const currentValue = this.value();
-    return this.options().find((opt) => opt.value === currentValue) || null;
+  readonly selectedOption = computed(() => {
+    return this.options().find((opt) => opt.value === this.internalValue()) || null;
   });
 
-  displayLabel = computed(() => {
-    const selected = this.selectedOption();
-    return selected ? selected.label : this.placeholder();
-  });
-
-  displayIcon = computed(() => {
-    if (this.icon()) return this.icon();
-    const selected = this.selectedOption();
-    return selected?.icon || null;
-  });
-
-  resolvedIconColor = computed(() => {
-    const hasSelected = this.hasSelection();
-    // When not selected, use placeholderColor; when selected, use iconColor
-    if (!hasSelected && this.placeholderColor()) {
-      return this.placeholderColor();
-    }
-    return this.iconColor() || 'currentColor';
-  });
-
-  resolvedChevronColor = computed(() => {
-    const hasSelected = this.hasSelection();
-    // When not selected, use placeholderColor; when selected, use textColor
-    if (!hasSelected && this.placeholderColor()) {
-      return this.placeholderColor();
-    }
-    return this.textColor() || 'currentColor';
-  });
-
-  resolvedLabelColor = computed(() => {
-    const hasSelected = this.hasSelection();
-    // When not selected, use placeholderColor; when selected, use textColor
-    if (!hasSelected && this.placeholderColor()) {
-      return this.placeholderColor();
-    }
-    return this.textColor() || null;
-  });
-
-  hasSelection = computed(() => this.selectedOption() !== null);
-
-  selectClasses = computed(() => {
-    return [
-      'g-select',
-      this.disabled() ? 'g-select--disabled' : '',
-      this.isOpen() ? 'g-select--open' : '',
-      this.bgColor() ? 'g-select--custom-bg' : '',
-      this.customClass(),
-    ]
-      .filter(Boolean)
-      .join(' ');
-  });
+  readonly hasSelection = computed(() => this.selectedOption() !== null);
 
   constructor() {
-    // Close dropdown when clicking outside
     effect(() => {
       if (this.isOpen()) {
         setTimeout(() => {
@@ -133,35 +86,51 @@ export class GSelect {
     });
   }
 
-  private getOptionLabel(optionComponent: GOption): string {
-    const element = optionComponent.elementRef.nativeElement;
-    return element.textContent?.trim() || '';
-  }
-
   private handleOutsideClick = (event: MouseEvent): void => {
     const clickedInside = this.elementRef.nativeElement.contains(event.target);
     if (!clickedInside) {
       this.isOpen.set(false);
+      this.onTouched();
+      this.isFocused.set(false);
     }
   };
 
   toggleDropdown(): void {
-    if (!this.disabled()) {
-      this.isOpen.update((value) => !value);
+    if (this.isDisabled()) return;
+    this.isOpen.update((v) => !v);
+    if (!this.isOpen()) {
+      this.onTouched();
+      this.isFocused.set(false);
+    } else {
+      this.isFocused.set(true);
     }
   }
 
   selectOption(option: SelectOption): void {
-    if (!this.disabled()) {
-      this.valueChange.emit(option.value);
-      this.isOpen.set(false);
-    }
+    if (this.isDisabled()) return;
+    this.internalValue.set(option.value);
+    this.onChange(option.value);
+    this.isOpen.set(false);
+    this.isFocused.set(false);
+  }
+
+  // CVA Methods
+  writeValue(value: string | null | undefined): void {
+    this.internalValue.set(value ?? '');
+  }
+  registerOnChange(fn: (value: string) => void): void {
+    this.onChange = fn;
+  }
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+  setDisabledState(isDisabled: boolean): void {
+    this.disabledByForm.set(isDisabled);
   }
 
   @HostListener('keydown', ['$event'])
   handleKeydown(event: KeyboardEvent): void {
-    if (this.disabled()) return;
-
+    if (this.isDisabled()) return;
     switch (event.key) {
       case 'Enter':
       case ' ':
@@ -174,32 +143,23 @@ export class GSelect {
         break;
       case 'ArrowDown':
         event.preventDefault();
-        if (!this.isOpen()) {
-          this.isOpen.set(true);
-        } else {
-          this.navigateOptions(1);
-        }
+        if (!this.isOpen()) this.isOpen.set(true);
+        else this.navigateOptions(1);
         break;
       case 'ArrowUp':
         event.preventDefault();
-        if (this.isOpen()) {
-          this.navigateOptions(-1);
-        }
+        if (this.isOpen()) this.navigateOptions(-1);
         break;
     }
   }
 
   private navigateOptions(direction: number): void {
     const opts = this.options();
-    const currentIndex = opts.findIndex((opt) => opt.value === this.value());
+    const currentIndex = opts.findIndex((opt) => opt.value === this.internalValue());
     const nextIndex = currentIndex + direction;
-
     if (nextIndex >= 0 && nextIndex < opts.length) {
-      this.valueChange.emit(opts[nextIndex].value);
+      this.internalValue.set(opts[nextIndex].value);
+      this.onChange(opts[nextIndex].value);
     }
-  }
-
-  isSelected(option: SelectOption): boolean {
-    return option.value === this.value();
   }
 }

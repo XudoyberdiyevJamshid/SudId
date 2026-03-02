@@ -1,73 +1,65 @@
-<!-- Hidden slot for g-option children -->
-<ng-content />
-
-<div tabindex="0" [class]="selectClasses()" [style.width]="selectWidth() || null">
+<div class="relative w-full block">
   <button
-    class="g-select__trigger"
     type="button"
-    [attr.aria-disabled]="disabled()"
-    [attr.aria-expanded]="isOpen()"
-    [attr.aria-haspopup]="'listbox'"
-    [disabled]="disabled()"
-    [style.background]="bgColor() || null"
-    [style.color]="textColor() || null"
+    class="relative flex items-center justify-between gap-2 h-14 w-full px-4 bg-white border rounded-xl outline-none transition-colors duration-200 text-left"
+    [ngClass]="{
+      'border-blue-500 ring-2 ring-blue-50': (isOpen() || isFocused()) && !error(),
+      'border-red-500': error(),
+      'border-[#EEEEEE] hover:border-gray-300': !isOpen() && !isFocused() && !error(),
+      'opacity-60 cursor-not-allowed bg-gray-50': isDisabled(),
+    }"
+    [disabled]="isDisabled()"
     (click)="toggleDropdown()"
   >
-    <!-- Icon area -->
-    @if (displayIcon()) {
-      <span class="g-select__icon">
-        <g-icon [color]="resolvedIconColor()" [name]="displayIcon()!" [size]="iconSize()" />
-      </span>
-    }
+    <div class="flex-1 overflow-hidden truncate">
+      @if (hasSelection()) {
+        <ng-container [ngTemplateOutlet]="selectedOption()!.template"></ng-container>
+      } @else {
+        <span class="text-[15px] text-gray-400 font-medium">{{ placeholder() }}</span>
+      }
+    </div>
 
-    <!-- Label -->
     <span
-      class="g-select__label"
-      [class.g-select__label--placeholder]="!hasSelection()"
-      [style.color]="resolvedLabelColor()"
+      class="flex items-center justify-center shrink-0 text-gray-400 transition-transform duration-300"
+      [class.rotate-180]="isOpen()"
     >
-      {{ displayLabel() }}
-    </span>
-
-    <!-- Chevron indicator -->
-    <span
-      class="g-select__chevron"
-      [class.g-select__chevron--rotated]="isOpen()"
-      [style.color]="resolvedChevronColor()"
-    >
-      <g-icon [color]="'currentColor'" [name]="'chevron-down'" [size]="'16px'" />
+      <g-icon name="chevron-down" size="16"></g-icon>
     </span>
   </button>
 
-  <!-- Dropdown menu -->
   @if (isOpen()) {
     <div
-      #dropdown
-      class="g-select__dropdown"
-      role="listbox"
-      [style.background]="bgColor() || null"
-      [style.color]="textColor() || null"
+      class="absolute top-[calc(100%+8px)] left-0 w-full bg-white border border-gray-100 rounded-xl shadow-lg max-h-60 overflow-y-auto z-50 py-1"
     >
       @for (option of options(); track option.value) {
         <button
-          class="g-select__option"
-          role="option"
           type="button"
-          [attr.aria-selected]="isSelected(option)"
-          [class.g-select__option--selected]="isSelected(option)"
+          class="flex items-center gap-3 w-full px-4 py-2 text-left transition-colors duration-150 outline-none"
+          [ngClass]="{
+            'bg-blue-50/50': option.value === internalValue(),
+            'hover:bg-gray-50 focus:bg-gray-50': option.value !== internalValue(),
+          }"
           (click)="selectOption(option)"
         >
-          @if (option.icon) {
-            <span class="g-select__option-icon">
-              <g-icon [color]="'currentColor'" [name]="option.icon" [size]="'24px'" />
+          <div class="flex-1 w-full">
+            <ng-container [ngTemplateOutlet]="option.template"></ng-container>
+          </div>
+
+          @if (option.value === internalValue()) {
+            <span class="text-blue-500 shrink-0">
+              <g-icon name="check" size="20"></g-icon>
             </span>
-          }
-          <span class="g-select__option-label">{{ option.label }}</span>
-          @if (isSelected(option)) {
-            <span class="g-select__option-checkmark">✓</span>
           }
         </button>
       }
     </div>
+  }
+</div>
+
+<div class="min-h-2 mt-1">
+  @if (error()) {
+    <span class="text-xs text-red-500 font-medium animate-fade-in">
+      {{ error() }}
+    </span>
   }
 </div>

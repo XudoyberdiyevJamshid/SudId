@@ -1,23 +1,7 @@
 <form [formGroup]="registerForm" class="flex flex-col">
-  <g-select-new
-    placeholder="ERI kalitini tanlang"
-    formControlName="eriKey"
-    [error]="getErrorMessage('eriKey')"
-  >
+  <g-select-new class="block w-full" placeholder="ERI kalitini tanlang" [formControl]="eriControl">
     @for (key of eriKeys; track key.id) {
-      <g-option-new [value]="key.id">
-        <div class="flex flex-col py-0.5">
-          <span class="font-medium text-gray-800 text-sm">{{ key.name }}</span>
-          <div class="flex items-center gap-4 text-[13px] text-gray-400 mt-1">
-            <span class="flex items-center gap-1.5">
-              <g-icon name="eye" size="16"></g-icon> {{ key.jshshir }}
-            </span>
-            <span class="flex items-center gap-1.5">
-              <i class="ph-calendar-blank"></i> {{ key.date }}
-            </span>
-          </div>
-        </div>
-      </g-option-new>
+      <g-option-new [value]="key.id" [label]="key.name"> </g-option-new>
     }
   </g-select-new>
   <g-input

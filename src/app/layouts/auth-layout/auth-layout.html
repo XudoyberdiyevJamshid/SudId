@@ -1,10 +1,10 @@
-<div class="flex h-screen overflow-hidden w-full bg-white">
+<div class="flex h-screen w-full bg-white">
   <div class="hidden lg:flex relative w-1/2 bg-gray-900 overflow-hidden">
     <div class="absolute inset-0">
       <img
         [src]="slides()[currentSlide()].image"
         alt="Sud binosi"
-        class="w-full h-full object-cover"
+        class="h-full object-cover opacity-80"
       />
       <div
         class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"
@@ -63,11 +63,9 @@
     </div>
   </div>
 
-  <div class="flex flex-col w-full lg:w-1/2 relative h-full">
+  <div class="flex flex-col w-full lg:w-1/2 relative">
     <!-- <div class="absolute top-6 right-6 sm:top-10 sm:right-12 z-10">
-      <button
-        class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 rounded-lg transition-colors border border-transparent hover:border-gray-200"
-      >
+      <button class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 rounded-lg transition-colors border border-transparent hover:border-gray-200">
         <i class="ph-globe text-blue-500 text-lg"></i>
         O'zbekcha
         <i class="ph-caret-down text-gray-400"></i>
@@ -75,11 +73,11 @@
     </div> -->
 
     <main class="flex-1 flex items-center justify-center p-6 sm:p-12 lg:p-16 overflow-y-auto">
-      <div class="w-full max-w-md my-auto">
+      <div class="w-full max-w-md">
         <router-outlet></router-outlet>
       </div>
     </main>
-    <p class="text-title text-[0.8125rem] text-center mb-3 md:mb-11">
+    <p class="text-title text-[0.8125rem] text-center mb-11">
       Xavfsizlik siyosati <span class="text-subtitle">va</span> foydalanish qoidalar
     </p>
   </div>
