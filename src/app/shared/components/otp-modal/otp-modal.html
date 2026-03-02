@@ -1,0 +1,48 @@
+<div class="bg-white rounded-[2rem] p-10 w-full shadow-2xl relative animate-fade-in">
+  <button
+    (click)="close()"
+    class="absolute top-6 right-6 text-gray-400 hover:text-gray-600 transition-colors outline-none"
+  >
+    X
+  </button>
+
+  <h2 class="text-xl font-semibold text-title mb-3">Davom etish uchun OTP ni kiriting!</h2>
+  <p class="text-[15px] text-subtitle leading-relaxed mb-6">
+    Iltimos, telefon raqamingizga yuborilgan OTP kodini kiriting! Kodni kiritgandan so'ng, jarayonni
+    davom ettirishingiz mumkin.
+  </p>
+
+  <div class="flex items-center justify-between gap-2 mb-6">
+    @for (val of otpValues(); track $index) {
+      <input
+        #otpInput
+        type="text"
+        inputmode="numeric"
+        maxlength="1"
+        [value]="val"
+        placeholder="X"
+        (input)="onInput($event, $index)"
+        (keydown)="onKeyDown($event, $index)"
+        class="w-[84px] h-14 text-center text-xl font-semibold text-title bg-white border border-[#EEEEEE] rounded-xl outline-none transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-50 focus:shadow-sm"
+      />
+    }
+  </div>
+
+  <div class="flex flex-col items-center gap-6">
+    <div class="text-[13px] font-medium text-gray-500">
+      {{ formatTime(timeLeft()) }}
+    </div>
+
+    <g-button
+      class="w-full"
+      (click)="resend()"
+      [disabled]="timeLeft() > 0"
+      variant="secondary"
+      rounded="sm"
+      [fullWidth]="true"
+    >
+      <g-icon name="refresh-icon" size="16" [class.animate-spin]="timeLeft() === 0"></g-icon>
+      Qayta yuborish
+    </g-button>
+  </div>
+</div>

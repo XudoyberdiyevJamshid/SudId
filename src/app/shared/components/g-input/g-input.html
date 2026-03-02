@@ -1,24 +1,25 @@
-<div class="flex flex-col gap-1.5 w-full">
+<div class="flex flex-col gap-2 w-full">
   @if (label()) {
-    <label class="text-sm font-medium text-gray-600">{{ label() }}</label>
+    <label class="text-[0.9375rem] font-medium text-title">{{ label() }}</label>
   }
 
   <div
-    class="flex items-center gap-2 h-12 px-4 bg-white border rounded-xl transition-colors duration-200 overflow-hidden"
+    class="flex items-center gap-2 h-12 px-6 py-[16.5px] bg-white border rounded-xl transition-colors duration-200 overflow-hidden"
     [ngClass]="{
       'border-blue-500 ring-2 ring-blue-50': isFocused() && !error(),
       'border-red-500': error(),
       'border-gray-200 hover:border-gray-300': !isFocused() && !error(),
-      'opacity-60 cursor-not-allowed bg-gray-50': isDisabled()
+      'opacity-60 cursor-not-allowed bg-gray-50': isDisabled(),
     }"
   >
     @if (icon()) {
       <span class="flex items-center justify-center shrink-0 text-gray-400">
-        <i [class]="icon()"></i>
+        <g-icon [name]="icon()!" size="16"></g-icon>
       </span>
     }
 
     <input
+      autocomplete="off"
       class="flex-1 w-full bg-transparent border-none outline-none text-sm text-gray-800 placeholder-gray-400 disabled:cursor-not-allowed"
       [attr.inputmode]="type() === 'number' ? 'numeric' : null"
       [disabled]="isDisabled()"
@@ -36,12 +37,20 @@
         class="flex items-center justify-center shrink-0 text-gray-400 hover:text-gray-600 focus:outline-none transition-colors"
         (click)="togglePassword()"
       >
-        <i class="text-lg" [ngClass]="showPassword() ? 'ph-eye-slash' : 'ph-eye'"></i>
+        @if (showPassword()) {
+          <g-icon name="eye" size="16"></g-icon>
+        } @else {
+          <g-icon name="eye-splash" class="h-4 w-4"></g-icon>
+        }
       </button>
     }
   </div>
 
-  @if (error()) {
-    <span class="text-xs text-red-500 font-medium">{{ error() }}</span>
-  }
+  <div class="min-h-2">
+    @if (error()) {
+      <span class="text-xs text-red-500 font-medium animate-fade-in">
+        {{ error() }}
+      </span>
+    }
+  </div>
 </div>

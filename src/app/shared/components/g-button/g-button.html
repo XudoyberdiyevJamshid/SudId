@@ -1,9 +1,9 @@
-<button [class]="buttonClasses()" [disabled]="disabled() || loading()">
+<button [class]="buttonClasses()" [disabled]="disabled() || loading()" type="button">
   @if (loading()) {
     <span class="loading-spinner"></span>
   }
   @if (title()) {
-    {{ title()  }}
+    {{ title() }}
   } @else {
     <ng-content />
   }

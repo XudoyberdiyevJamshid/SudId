@@ -1,8 +1,7 @@
 <div>
   <div class="flex gap-4 items-center text-4xl font-bold">
-    
     <p
-      class="cursor-pointer  transition-opacity duration-200"
+      class="cursor-pointer transition-opacity duration-200"
       [class.text-title]="currentTab() == 'login'"
       [class.opacity-30]="currentTab() != 'login'"
       (click)="switchTab('login')"
@@ -18,10 +17,20 @@
     >
       Ro’yxatdan o’tish
     </p>
-
   </div>
 
   <div>
-    <app-login-form></app-login-form>
+    <div class="mt-10 mb-4">
+      <h3 class="text-title text-xl font-semibold">Assalomu alaykum!</h3>
+      <p class="text-subtitle mt-3 text-[0.9375rem] leading-6">
+        ID.SUD.UZ tizimiga xush kelibsiz! Barcha sud <br />
+        tizimlariga bir joyda ro’yxatdan o’ting
+      </p>
+    </div>
+    @if (currentTab() == 'login') {
+      <app-login-form></app-login-form>
+    } @else {
+      <app-register-form></app-register-form>
+    }
   </div>
 </div>

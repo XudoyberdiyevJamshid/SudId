@@ -1,9 +1,18 @@
-import { ChangeDetectionStrategy, Component, computed, effect, forwardRef, input, output, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  forwardRef,
+  input,
+  output,
+  signal,
+} from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { NgClass } from '@angular/common'; // Tailwind class binding uchun
-// import { GIcon } from '../g-icon/g-icon'; // O'zingizning ikonka komponentingiz
+import { NgClass } from '@angular/common';
+import { GIcon } from '../g-icon/g-icon';
 
-export type GInputType = 'text' | 'number' | 'email' | 'password';
+export type GInputType = 'text' | 'number' | 'email' | 'password' | 'phone';
 
 function formatNumber(value: number | string | null | undefined): string {
   if (value === null || value === undefined || value === '') return '';
@@ -11,10 +20,30 @@ function formatNumber(value: number | string | null | undefined): string {
   return num.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 }
 
+function formatPhone(value: string): string {
+  let nums = value.replace(/\D/g, '');
+
+  if (nums.startsWith('998')) {
+    nums = nums.substring(3);
+  }
+
+  nums = nums.substring(0, 9);
+
+  if (nums.length === 0) return '+998 ';
+
+  let formatted = '+998 ';
+  if (nums.length > 0) formatted += nums.substring(0, 2);
+  if (nums.length > 2) formatted += ' ' + nums.substring(2, 5);
+  if (nums.length > 5) formatted += '-' + nums.substring(5, 7);
+  if (nums.length > 7) formatted += '-' + nums.substring(7, 9);
+
+  return formatted;
+}
+
 @Component({
   selector: 'g-input',
   standalone: true,
-  imports: [NgClass], // GIcon ni ham qo'shib qo'yasiz
+  imports: [NgClass, GIcon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
@@ -32,8 +61,7 @@ export class GInput implements ControlValueAccessor {
   readonly label = input<string>('');
   readonly icon = input<string | undefined>(undefined);
   readonly iconColor = input<string | undefined>(undefined);
-  readonly error = input<string>(''); // Xatolik xabari uchun yangi input
-
+  readonly error = input<string>('');
   readonly disabled = input<boolean>(false);
   readonly value = input<string | number | null | undefined>(undefined);
 
@@ -43,12 +71,10 @@ export class GInput implements ControlValueAccessor {
   readonly isFocused = signal<boolean>(false);
   private readonly disabledByForm = signal<boolean>(false);
 
-  // Parolni ko'rsatish/yashirish holati
   readonly showPassword = signal<boolean>(false);
 
   readonly isDisabled = computed(() => this.disabled() || this.disabledByForm());
 
-  // Agar type password bo'lsa va showPassword true bo'lsa, text ga aylanadi
   readonly currentType = computed(() => {
     if (this.type() === 'password') {
       return this.showPassword() ? 'text' : 'password';
@@ -59,6 +85,9 @@ export class GInput implements ControlValueAccessor {
   readonly displayValue = computed<string>(() => {
     if (this.type() === 'number') {
       return formatNumber(this.internalValue());
+    }
+    if (this.type() === 'phone') {
+      return formatPhone(String(this.internalValue() ?? ''));
     }
     return String(this.internalValue() ?? '');
   });
@@ -80,10 +109,17 @@ export class GInput implements ControlValueAccessor {
 
     if (this.type() === 'number') {
       const digitsOnly = inputElement.value.replace(/\D/g, '');
-      const rawNumber: string | number = digitsOnly === '' ? '' : Number(digitsOnly);
+      const rawNumber = digitsOnly === '' ? '' : Number(digitsOnly);
       this.internalValue.set(rawNumber);
       this.onChange(rawNumber);
       this.valueChange.emit(rawNumber);
+    } else if (this.type() === 'phone') {
+      const formatted = formatPhone(inputElement.value);
+      inputElement.value = formatted;
+      const rawPhone = formatted.replace(/\s|-/g, '');
+      this.internalValue.set(rawPhone);
+      this.onChange(rawPhone);
+      this.valueChange.emit(rawPhone);
     } else {
       const rawValue = inputElement.value;
       this.internalValue.set(rawValue);
@@ -102,7 +138,7 @@ export class GInput implements ControlValueAccessor {
   }
 
   togglePassword(): void {
-    this.showPassword.update(v => !v);
+    this.showPassword.update((v) => !v);
   }
 
   writeValue(value: string | number | null | undefined): void {

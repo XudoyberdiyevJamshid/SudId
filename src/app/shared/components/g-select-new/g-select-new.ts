@@ -47,6 +47,7 @@ export class GSelectNew implements ControlValueAccessor {
   readonly disabled = input<boolean>(false);
   readonly icon = input<string>('');
   readonly customClass = input<string>('');
+  readonly error = input<string>('');
 
   // CVA state
   private onChange: (value: string) => void = () => {};

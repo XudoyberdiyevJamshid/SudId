@@ -31,8 +31,8 @@ class GButton {
 
   readonly variantClasses = computed(() => {
     const variants: Record<ButtonVariant, string> = {
-      secondary: 'bg-secondary-600 text-white hover:bg-secondary-700',
-      primary: 'bg-primary-700 text-white hover:bg-primary-800',
+      secondary: 'bg-[#F9F9F9] text-[#2C8CE6] hover:bg-secondary-700',
+      primary: 'bg-primary-700 text-white hover:opacity-95',
       'outline-primary': ' text-primary-700  border  shadow-none!  border! active-none!  ',
       outline: 'bg-transparent border-2 border-primary-700 text-primary-700 hover:bg-primary-50',
       ghost: 'bg-transparent text-primary-700 hover:bg-primary-50',
@@ -45,7 +45,7 @@ class GButton {
   readonly sizeClasses = computed(() => {
     const sizes: Record<ButtonSize, string> = {
       sm: 'px-4 py-2 text-sm',
-      md: 'px-6 py-3 text-md',
+      md: 'px-6 py-[1.125rem] text-[13px]',
       lg: 'px-8 py-4 text-lg',
     };
     return sizes[this.size()];
@@ -69,7 +69,7 @@ class GButton {
       this.sizeClasses(),
       this.roundedClasses(),
       this.fullWidth() ? 'w-full' : '',
-      this.disabled() || this.loading() ? 'opacity-50 cursor-not-allowed' : '',
+      this.disabled() || this.loading() ? 'opacity-80 cursor-not-allowed shadow-none' : '',
       this.customClass(),
     ]
       .filter(Boolean)

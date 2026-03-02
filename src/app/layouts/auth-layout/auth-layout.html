@@ -1,22 +1,21 @@
-<div class="flex min-h-screen w-full bg-white">
-
- 
-
+<div class="flex h-screen overflow-hidden w-full bg-white">
   <div class="hidden lg:flex relative w-1/2 bg-gray-900 overflow-hidden">
-
     <div class="absolute inset-0">
-  
       <img
         [src]="slides()[currentSlide()].image"
         alt="Sud binosi"
-        class="w-full h-full object-cover opacity-80"
-      >
-      <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+        class="w-full h-full object-cover"
+      />
+      <div
+        class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"
+      ></div>
     </div>
 
     <div class="absolute top-10 left-12 z-10">
       <div class="flex items-center gap-2 text-white">
-        <div class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center font-bold text-xl shadow-lg">
+        <div
+          class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center font-bold text-xl shadow-lg"
+        >
           ID
         </div>
         <div class="leading-tight font-semibold tracking-wide">
@@ -27,21 +26,21 @@
     </div>
 
     <div class="absolute bottom-12 left-12 right-12 z-10">
-
-      <h1 class="text-3xl xl:text-4xl font-semibold text-white mb-4 leading-tight">
+      <h1 class="text-3xl md:text-[2.5rem] font-semibold text-white mb-4 leading-tight">
         {{ slides()[currentSlide()].title }}
       </h1>
-      <p class="text-gray-300 text-sm xl:text-base leading-relaxed max-w-xl mb-10">
+      <p class="text-gray-300 text-sm md:text-base leading-relaxed max-w-xl mb-6 font-normal">
         {{ slides()[currentSlide()].description }}
       </p>
 
       <div class="flex items-center justify-between">
-
         <div class="flex items-center gap-2">
           @for (slide of slides(); track $index) {
             <div
               class="h-1.5 rounded-full transition-all duration-300"
-              [class]="currentSlide() === $index ? 'w-16 bg-white' : 'w-8 bg-white/30'"
+              [class]="
+                currentSlide() === $index ? 'w-[8.375rem] h-3 bg-white' : 'w-16  bg-white/30'
+              "
             ></div>
           }
         </div>
@@ -51,24 +50,24 @@
             (click)="prevSlide()"
             class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center text-white transition-colors"
           >
-           <g-icon name="chevron-right" ></g-icon>
+            <g-icon name="chevron-right"></g-icon>
           </button>
           <button
             (click)="nextSlide()"
-            class="w-10 h-10  rounded-full bg-white text-gray-900 hover:bg-gray-100 flex items-center justify-center transition-colors shadow-lg"
+            class="w-10 h-10 rounded-full bg-white text-gray-900 hover:bg-gray-100 flex items-center justify-center transition-colors shadow-lg"
           >
-           <g-icon name="chevron-left" color="#2C8CE6"></g-icon>
+            <g-icon name="chevron-left" color="#2C8CE6"></g-icon>
           </button>
         </div>
       </div>
     </div>
   </div>
 
-
-  <div class="flex flex-col w-full lg:w-1/2 relative">
-
+  <div class="flex flex-col w-full lg:w-1/2 relative h-full">
     <!-- <div class="absolute top-6 right-6 sm:top-10 sm:right-12 z-10">
-      <button class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 rounded-lg transition-colors border border-transparent hover:border-gray-200">
+      <button
+        class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 rounded-lg transition-colors border border-transparent hover:border-gray-200"
+      >
         <i class="ph-globe text-blue-500 text-lg"></i>
         O'zbekcha
         <i class="ph-caret-down text-gray-400"></i>
@@ -76,13 +75,12 @@
     </div> -->
 
     <main class="flex-1 flex items-center justify-center p-6 sm:p-12 lg:p-16 overflow-y-auto">
-      <div class="w-full max-w-md">
-
+      <div class="w-full max-w-md my-auto">
         <router-outlet></router-outlet>
-
       </div>
     </main>
-
+    <p class="text-title text-[0.8125rem] text-center mb-3 md:mb-11">
+      Xavfsizlik siyosati <span class="text-subtitle">va</span> foydalanish qoidalar
+    </p>
   </div>
 </div>
-
