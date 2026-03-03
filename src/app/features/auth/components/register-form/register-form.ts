@@ -1,6 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { GSelectNew } from '../../../../shared/components/g-select-new/g-select-new';
-import { GOptionNew } from '../../../../shared/components/g-select-new/g-option-new';
+
 import {
   FormControl,
   NonNullableFormBuilder,
@@ -12,10 +11,12 @@ import { GIcon } from '../../../../shared/components/g-icon/g-icon';
 import GButton from '../../../../shared/components/g-button/g-button';
 import { Dialog } from '@angular/cdk/dialog';
 import { OtpModal } from '../../../../shared/components/otp-modal/otp-modal';
+import { GOption, GSelect } from "../../../../shared/components/g-select";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register-form',
-  imports: [GSelectNew, GOptionNew, ReactiveFormsModule, GInput, GIcon, GButton],
+  imports: [ ReactiveFormsModule, GInput, GIcon, GButton, GOption, GSelect],
   templateUrl: './register-form.html',
   styleUrl: './register-form.scss',
 })
@@ -35,13 +36,14 @@ export class RegisterForm implements OnInit {
   ];
 
   private fb = inject(NonNullableFormBuilder);
+  router=inject(Router)
 
   registerForm = this.fb.group({
     eriKey: ['', Validators.required],
-    username: ['', Validators.required],
-    password: ['', Validators.required],
-    confirmPassword: ['', Validators.required],
-    phone: ['+998 ', Validators.required],
+    username: [{'value': '', disabled: true}, Validators.required],
+    password: [{'value': '', disabled: true}, Validators.required],
+    confirmPassword: [{'value': '', disabled: true}, Validators.required],
+    phone: [{value:'+998 ',disabled:true}, Validators.required],
   });
 
   getErrorMessage(constrolName: string) {
@@ -64,19 +66,22 @@ export class RegisterForm implements OnInit {
 
   onSubmit() {
     if (this.registerForm.valid) {
-      const dialogRef = this.dialog.open(OtpModal, {
-        width: '100%',
-        maxWidth: '630px',
-        backdropClass: 'backdrop-blur-[4px]',
-        disableClose: true,
-      });
-      dialogRef.closed.subscribe((otpCode) => {
-        if (otpCode) {
-          console.log("Ro'yxatdan o'tish yakunlandi! Kiritilgan OTP:", otpCode);
-        } else {
-          console.log('Foydalanuvchi modalni yopib yubordi.');
-        }
-      });
+      console.log(this.registerForm.value);
+      this.router.navigate(['/complete-register'])
+      
+      // const dialogRef = this.dialog.open(OtpModal, {
+      //   width: '100%',
+      //   maxWidth: '630px',
+      //   backdropClass: 'backdrop-blur-[4px]',
+      //   disableClose: true,
+      // });
+      // dialogRef.closed.subscribe((otpCode) => {
+      //   if (otpCode) {
+      //     console.log("Ro'yxatdan o'tish yakunlandi! Kiritilgan OTP:", otpCode);
+      //   } else {
+      //     console.log('Foydalanuvchi modalni yopib yubordi.');
+      //   }
+      // });
     } else {
       this.registerForm.markAllAsTouched();
     }

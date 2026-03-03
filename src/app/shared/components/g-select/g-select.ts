@@ -20,6 +20,7 @@ export interface SelectOption {
   value: string;
   label: string;
   template: any;
+  subLabel: string;
 }
 
 @Component({
@@ -37,7 +38,7 @@ export interface SelectOption {
     },
   ],
   host: {
-    class: 'block w-full', // Sakrashni oldini olish uchun
+    class: 'block w-full', 
   },
 })
 export class GSelect implements ControlValueAccessor {
@@ -47,6 +48,7 @@ export class GSelect implements ControlValueAccessor {
   // Inputs
   readonly placeholder = input<string>('Tanlang');
   readonly disabled = input<boolean>(false);
+  readonly label = input<string>('');
   readonly error = input<string>('');
 
   // CVA state
@@ -63,6 +65,7 @@ export class GSelect implements ControlValueAccessor {
   readonly options = computed<SelectOption[]>(() => {
     return this.optionComponents().map((opt) => ({
       value: opt.value(),
+      subLabel: opt.subLabel(),
       label: opt.label(),
       template: opt.template,
     }));

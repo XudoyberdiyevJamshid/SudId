@@ -3,7 +3,6 @@ import { ChangeDetectionStrategy, Component, input, TemplateRef, ViewChild } fro
 @Component({
   selector: 'g-option',
   standalone: true,
-  // DIQQAT: ng-content ni ng-template ga o'radik
   template: '<ng-template><ng-content></ng-content></ng-template>',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
@@ -12,7 +11,8 @@ import { ChangeDetectionStrategy, Component, input, TemplateRef, ViewChild } fro
 })
 export class GOption {
   readonly value = input.required<string>();
-  readonly label = input<string>(''); // Agar kerak bo'lsa
-
+  readonly label = input<string>(''); 
+  readonly subLabel = input<string>('');
+  
   @ViewChild(TemplateRef, { static: true }) template!: TemplateRef<any>;
 }

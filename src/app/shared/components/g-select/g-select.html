@@ -1,7 +1,10 @@
 <div class="relative w-full block">
+   @if (label()) {
+    <label class="text-[0.9375rem] font-medium text-title ">{{ label() }}</label>
+  }
   <button
     type="button"
-    class="relative flex items-center justify-between gap-2 h-14 w-full px-4 bg-white border rounded-xl outline-none transition-colors duration-200 text-left"
+    class="relative mt-2 flex items-center justify-between gap-2 h-12 px-6 py-[16.5px] w-full  bg-white border rounded-xl outline-none transition-colors duration-200 text-left"
     [ngClass]="{
       'border-blue-500 ring-2 ring-blue-50': (isOpen() || isFocused()) && !error(),
       'border-red-500': error(),
@@ -13,12 +16,19 @@
   >
     <div class="flex-1 overflow-hidden truncate">
       @if (hasSelection()) {
-        <ng-container [ngTemplateOutlet]="selectedOption()!.template"></ng-container>
+        
+        <div class="flex items-center gap-2 truncate">
+          <span class="text-[15px] font-medium text-gray-800">{{ selectedOption()!.label }}</span>
+          
+          @if (selectedOption()!.subLabel) {
+            <span class="text-[14px] text-blue-500 font-medium">{{ selectedOption()!.subLabel }}</span>
+          }
+        </div>
+
       } @else {
         <span class="text-[15px] text-gray-400 font-medium">{{ placeholder() }}</span>
       }
     </div>
-
     <span
       class="flex items-center justify-center shrink-0 text-gray-400 transition-transform duration-300"
       [class.rotate-180]="isOpen()"

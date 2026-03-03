@@ -21,15 +21,15 @@
     <div>
       <g-select placeholder="ERI kalitini tanlang">
         @for (key of eriKeys; track key.id) {
-          <g-option [value]="key.id" [label]="key.name">
-            <div class="flex flex-col py-0.5">
+          <g-option [value]="key.id" [label]="key.name" [subLabel]="key.jshshir">
+            <div class="flex flex-col p-3">
               <span class="font-medium text-gray-800 text-sm">{{ key.name }}</span>
               <div class="flex items-center gap-4 text-[13px] text-gray-400 mt-1">
                 <span class="flex items-center gap-1.5">
-                  <g-icon name="user"></g-icon> {{ key.jshshir }}
+                  <g-icon name="user" color="#2C8CE6" size="16"></g-icon> {{ key.jshshir }}
                 </span>
                 <span class="flex items-center gap-1.5">
-                  <i class="ph-calendar-blank"></i> {{ key.date }}
+                  <g-icon name="calendar" color="#2C8CE6" size="16"></g-icon> {{ key.date }}
                 </span>
               </div>
             </div>

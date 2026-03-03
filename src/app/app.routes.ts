@@ -16,5 +16,9 @@ export const routes: Routes = [
                 loadComponent:()=>import('../app/features/auth/pages/login/login').then(m=>m.Login)
             }
         ]
+    },
+    {
+        path: 'complete-register',
+        loadComponent: () => import('../app/features/auth/pages/complete-register/complete-register').then(m => m.CompleteRegister)
     }
 ];
