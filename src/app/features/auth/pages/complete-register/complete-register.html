@@ -1,75 +1,101 @@
-<div class="max-w-[1200px] mx-auto p-8 bg-white min-h-screen">
-  <img src="../../../../../assets/images/logo-blue.png" alt="" />
-  <div class="flex items-center justify-between mb-10">
-    <div class="flex items-center gap-4">
-      <button
-        class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center hover:bg-gray-100 transition-colors"
-      >
-        <g-icon name="arrowlong-right" color="#8196A3" size="20"></g-icon>
-      </button>
-      <h1 class="text-3xl font-bold text-[#253F57]">Ro'yxatdan o'tish</h1>
-    </div>
+<div class="bg-white min-h-screen py-6 md:py-10 lg:py-11 relative">
+  <div class="absolute top-4 md:top-11 left-4 md:left-6 lg:left-[56px]">
+    <img
+      src="../../../../../assets/images/logo-blue.png"
+      class="w-[60px] h-[36px] md:w-[78px] md:h-[48px] object-contain"
+    />
+  </div>
+
+  <div
+    class="absolute top-4 md:top-11 right-4 md:right-6 lg:right-[56px] bg-[#F9F9F9] rounded-lg z-10"
+  >
+    <button
+      class="flex items-center gap-1.5 md:gap-2 px-3 md:px-4 py-1.5 md:py-2 text-xs md:text-sm font-medium text-gray-600 hover:bg-gray-50 rounded-lg transition-colors border border-transparent hover:border-gray-200"
+    >
+      <g-icon class="scale-90 md:scale-100" name="globus" size="16"></g-icon>
+      O'zbekcha
+      <g-icon class="scale-90 md:scale-100" name="chevron-down" size="14" color="#9CA3AF"></g-icon>
+    </button>
   </div>
 
   <div class="g-container">
+    <div
+      class="flex items-center gap-2 md:gap-4 mb-8 md:mb-12 pl-1 sm:pl-0 pt-16 md:pt-0 mt-4 md:mt-14 lg:mt-0"
+    >
+      <button
+        class="w-10 h-10 md:w-12 md:h-12 shrink-0 rounded-full bg-gray-50 flex items-center justify-center hover:bg-gray-100 transition-colors"
+      >
+        <g-icon
+          class="scale-90 md:scale-100"
+          name="arrowlong-right"
+          color="#8196A3"
+          size="20"
+        ></g-icon>
+      </button>
+      <h1 class="text-2xl md:text-4xl font-semibold text-title">Ro'yxatdan o'tish</h1>
+    </div>
 
-      <form [formGroup]="registerForm" class="flex flex-col gap-6" (ngSubmit)="onSubmit()">
-        <div class="grid grid-cols-2 gap-x-6 gap-y-5">
-          <g-select formControlName="citizenship" label="Fuqaroligi">
-            <g-option value="uzb" label="O'zbekiston Respublikasi fuqarosi">
-              <div class="py-1 text-[15px] text-gray-800">O'zbekiston Respublikasi fuqarosi</div>
-            </g-option>
-    
-            <g-option value="other" label="Chet el fuqarosi">
-              <div class="py-1 text-[15px] text-gray-800">Chet el fuqarosi</div>
-            </g-option>
-          </g-select>
-    
-          <g-input formControlName="pnfl" label="JShShIR"></g-input>
-    
-          <g-input formControlName="username" label="Foydalanuvchi nomi"></g-input>
-          <g-input formControlName="password" type="password" label="Parol"></g-input>
-    
-          <g-input formControlName="phone" label="Telefon raqami"></g-input>
-          <g-input formControlName="email" label="Elektron pochta"></g-input>
-    
-          <g-input formControlName="lastName" label="Familiyasi"></g-input>
-          <g-input formControlName="firstName" label="Ismi"></g-input>
-    
-          <g-input formControlName="middleName" label="Sharifi"></g-input>
-          <g-input formControlName="lastNameCyrillic" label="Familiyasi (kirilcha)"></g-input>
-    
-          <g-input formControlName="firstNameCyrillic" label="Ismi (kirilcha)"></g-input>
-          <g-input formControlName="middleNameCyrillic" label="Sharifi (kirilcha)"></g-input>
-        </div>
-    
-        <div class="grid grid-cols-3 gap-6">
-          <g-input formControlName="passport" label="Passport seriya raqami"></g-input>
-          <g-input formControlName="birthDate" label="Tug'ilgan sanasi"></g-input>
-          <g-select formControlName="gender" label="Jinsi" placeholder="Tanlang">
-            <g-option value="male" label="Erkak"></g-option>
-            <g-option value="female" label="Ayol"></g-option>
-          </g-select>
-        </div>
-    
-        <div class="grid grid-cols-2 gap-6">
-          <g-select formControlName="nationality" label="Millati" placeholder="Tanlang">
-            <g-option value="uzb" label="O'zbek"></g-option>
-            <g-option value="rus" label="Rus"></g-option>
-          </g-select>
-          <g-input formControlName="address" label="Manzili"></g-input>
-        </div>
-    
-        <div class="flex justify-end mt-4">
-          <g-button type="submit" class="w-[280px] block" size="lg">
+    <form [formGroup]="registerForm" class="flex flex-col" (ngSubmit)="onSubmit()">
+      <div class="grid grid-cols-1 md:grid-cols-2 md:gap-x-4 md:gap-y-1">
+        <g-select formControlName="citizenship" label="Fuqaroligi">
+          <g-option value="uzb" label="O'zbekiston Respublikasi fuqarosi">
+            <div class="py-1 text-sm md:text-[15px] text-gray-800">
+              O'zbekiston Respublikasi fuqarosi
+            </div>
+          </g-option>
+
+          <g-option value="other" label="Chet el fuqarosi">
+            <div class="py-1 text-sm md:text-[15px] text-gray-800">Chet el fuqarosi</div>
+          </g-option>
+        </g-select>
+
+        <g-input formControlName="pnfl" label="JShShIR"></g-input>
+
+        <g-input formControlName="username" label="Foydalanuvchi nomi"></g-input>
+        <g-input formControlName="password" type="password" label="Parol"></g-input>
+
+        <g-input formControlName="phone" label="Telefon raqami"></g-input>
+        <g-input formControlName="email" label="Elektron pochta"></g-input>
+
+        <g-input formControlName="lastName" label="Familiyasi"></g-input>
+        <g-input formControlName="firstName" label="Ismi"></g-input>
+
+        <g-input formControlName="middleName" label="Sharifi"></g-input>
+        <g-input formControlName="lastNameCyrillic" label="Familiyasi (kirilcha)"></g-input>
+
+        <g-input formControlName="firstNameCyrillic" label="Ismi (kirilcha)"></g-input>
+        <g-input formControlName="middleNameCyrillic" label="Sharifi (kirilcha)"></g-input>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-x-4">
+        <g-input formControlName="passport" label="Passport seriya raqami"></g-input>
+        <g-input formControlName="birthDate" label="Tug'ilgan sanasi"></g-input>
+        <g-select formControlName="gender" label="Jinsi" placeholder="Tanlang">
+          <g-option value="male" label="Erkak"></g-option>
+          <g-option value="female" label="Ayol"></g-option>
+        </g-select>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4">
+        <g-select formControlName="nationality" label="Millati" placeholder="Tanlang">
+          <g-option value="uzb" label="O'zbek"></g-option>
+          <g-option value="rus" label="Rus"></g-option>
+        </g-select>
+        <g-input formControlName="address" label="Manzili"></g-input>
+      </div>
+
+      <div class="flex justify-center md:justify-end mt-2 md:mt-4">
+        <div class="w-full md:w-[22.375rem]">
+          <g-button type="submit" [fullWidth]="true" rounded="sm" size="md">
             Tasdiqlash
             <div
-              class="w-7 h-7 rounded-full flex justify-center items-center absolute right-5 bg-white/20"
+              class="w-6 h-6 md:w-7 md:h-7 rounded-full flex justify-center items-center absolute right-4 md:right-5 bg-white/20"
             >
-              <g-icon name="arrow-right" size="14"></g-icon>
+              <g-icon class="scale-90 md:scale-100" name="arrow-right" size="14"></g-icon>
             </div>
           </g-button>
         </div>
-      </form>
+      </div>
+    </form>
   </div>
 </div>

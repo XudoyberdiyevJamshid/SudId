@@ -1,0 +1,54 @@
+<app-header></app-header>
+<div class="bg-[#F9F9F9] py-8 min-h-screen">
+  <div class="g-container flex gap-4">
+    <div class="w-1/4">
+      <g-card>
+        @for (menu of menus; track menu.path) {
+          <a
+            class="flex items-center gap-3 p-4 rounded-2xl cursor-pointer transition-colors outline-none hover:bg-[#73BBFF0D]"
+            [routerLink]="menu.path"
+            routerLinkActive="bg-[#73BBFF0D]"
+            #rla="routerLinkActive"
+          >
+            <g-icon [color]="rla.isActive ? '#2C8CE6' : '#6B7D89'" [name]="menu.icon" size="18">
+            </g-icon>
+
+            <p
+              class="text-[15px] font-medium"
+              [ngClass]="rla.isActive ? 'text-title' : 'text-subtitle2'"
+            >
+              {{ menu.label }}
+            </p>
+          </a>
+        }
+        <!-- <a
+          class="flex items-center gap-3 p-4 rounded-2xl cursor-pointer hover:bg-[#73BBFF0D]"
+          [routerLink]="['/dashboard/profile']"
+          routerLinkActive="active_router"
+        >
+          <g-icon color="#6B7D89" name="user" size="18"></g-icon>
+          <p class="text-[15px] font-medium text-subtitle2">Foydalanuvchi profili</p>
+        </a>
+        <a
+          class="flex items-center gap-3 p-4 rounded-2xl cursor-pointer hover:bg-[#73BBFF0D]"
+          [routerLink]="['/dashboard/sites']"
+          routerLinkActive="active_router"
+        >
+          <g-icon color="#6B7D89" name="link" size="18"></g-icon>
+          <p class="text-[15px] font-medium text-title text-subtitle2">Ulangan saytlar</p>
+        </a>
+        <a
+          class="flex items-center gap-3 p-4 rounded-2xl cursor-pointer hover:bg-[#73BBFF0D]"
+          [routerLink]="['/dashboard/settings']"
+          routerLinkActive="active_router"
+        >
+          <g-icon color="#6B7D89" name="settings" size="18"></g-icon>
+          <p class="text-[15px] font-medium text-subtitle2">Sozlamalar</p>
+        </a> -->
+      </g-card>
+    </div>
+    <div class="w-3/4">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

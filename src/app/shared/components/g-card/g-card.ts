@@ -1,19 +1,16 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { GIcon } from '../g-icon/g-icon';
-
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'g-card',
-  imports: [GIcon,],
-  templateUrl: './g-card.html',
-  styleUrl: './g-card.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  template: `<ng-content></ng-content>`,
+  host: {
+    class: `
+      block
+      p-5
+      rounded-3xl
+      bg-white
+    `,
+  },
 })
-export class GCard {
-  iconName = input.required<string>();
-  title = input.required<string>();
-  description = input.required<string>();
-  badge = input<boolean>(false);
-  color = input<string>('#8A10ED');
-  bgColor = input<string>('#F4D4FF4F');
-}
+export class GCard {}

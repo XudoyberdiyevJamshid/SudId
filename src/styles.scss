@@ -15,30 +15,30 @@
   }
 }
 
-// /* ==========================================================================
-//    GLOBAL CUSTOM SCROLLBAR (sud-id loyihasi uchun)
-//    ========================================================================== */
+/* ==========================================================================
+   GLOBAL CUSTOM SCROLLBAR (sud-id loyihasi uchun)
+   ========================================================================== */
 
-// ::-webkit-scrollbar {
-//   width: 16px;
-//   height: 16px;
-// }
+::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+}
 
-// ::-webkit-scrollbar-track {
-//   background: transparent;
-//   border-radius: 10px;
-// }
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 10px;
+}
 
-// ::-webkit-scrollbar-thumb {
-//   background-color: #cbd5e1;
-//   border-radius: 10px;
+::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 10px;
 
-//   &:hover {
-//     background-color: #94a3b8;
-//   }
-// }
+  &:hover {
+    background-color: #94a3b8;
+  }
+}
 
-// * {
-//   scrollbar-width: thin;
-//   scrollbar-color: #cbd5e1 transparent;
-// }
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}

@@ -1,0 +1,12 @@
+<g-card class="p-11">
+  <div class="flex gap-3 justify-between items-center">
+    @for (site of sites(); track site.link) {
+      <div
+        class="px-[4.375rem] py-[2.625rem] relative border-[1px] border-[#eee] rounded-xl flex items-center justify-center"
+      >
+        <g-icon name="arrow-up-right" size="18" class="absolute top-4 right-4"></g-icon>
+        <img [src]="site.logo" alt="logo" class="h-12 object-contain" />
+      </div>
+    }
+  </div>
+</g-card>
