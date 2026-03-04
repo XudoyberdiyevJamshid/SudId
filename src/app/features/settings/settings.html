@@ -1,1 +1,23 @@
-<p>settings works!</p>
+<g-card>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 p-6">
+    @for (menu of menus(); track menu.link) {
+      <a
+        [routerLink]="menu.link"
+        class="bg-white border border-gray-100 rounded-2xl h-[124px] flex flex-col items-center justify-center gap-4 transition-all duration-300 hover:border-blue-400 hover:shadow-md group cursor-pointer"
+      >
+        <g-icon
+          [name]="menu.icon"
+          size="28"
+          class="text-blue-500 group-hover:scale-110 transition-transform"
+        >
+        </g-icon>
+
+        <span
+          class="text-[0.9375rem] font-medium text-sub text-center px-4 group-hover:text-blue-500 transition-colors"
+        >
+          {{ menu.title }}
+        </span>
+      </a>
+    }
+  </div>
+</g-card>

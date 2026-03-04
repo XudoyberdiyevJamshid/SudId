@@ -45,7 +45,7 @@ class GButton {
   readonly sizeClasses = computed(() => {
     const sizes: Record<ButtonSize, string> = {
       sm: 'px-4 py-2 text-sm',
-      md: 'px-6 py-[1.125rem] text-[13px]',
+      md: 'px-6 py-4 text-[13px]',
       lg: 'px-8 py-4 text-lg',
     };
     return sizes[this.size()];

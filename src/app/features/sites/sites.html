@@ -1,12 +1,19 @@
-<g-card class="p-11">
-  <div class="flex gap-3 justify-between items-center">
+<g-card class="p-6 lg:p-11">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
     @for (site of sites(); track site.link) {
-      <div
-        class="px-[4.375rem] py-[2.625rem] relative border-[1px] border-[#eee] rounded-xl flex items-center justify-center"
+      <a
+        [href]="site.link"
+        target="_blank"
+        class="relative border-[1px] border-[#eee] rounded-xl flex items-center justify-center h-[124px] hover:shadow-md transition-shadow"
       >
-        <g-icon name="arrow-up-right" size="18" class="absolute top-4 right-4"></g-icon>
-        <img [src]="site.logo" alt="logo" class="h-12 object-contain" />
-      </div>
+        <g-icon
+          name="arrow-up-right"
+          size="18"
+          class="absolute top-4 right-4 text-gray-400"
+        ></g-icon>
+
+        <img [src]="site.logo" alt="logo" class="max-h-[70px] max-w-[70%] object-contain" />
+      </a>
     }
   </div>
 </g-card>
