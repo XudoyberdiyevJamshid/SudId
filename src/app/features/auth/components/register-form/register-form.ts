@@ -9,41 +9,34 @@ import {
 import { GInput } from '../../../../shared/components/g-input/g-input';
 import { GIcon } from '../../../../shared/components/g-icon/g-icon';
 import GButton from '../../../../shared/components/g-button/g-button';
-import { Dialog } from '@angular/cdk/dialog';
-import { OtpModal } from '../../../../shared/components/otp-modal/otp-modal';
-import { GOption, GSelect } from "../../../../shared/components/g-select";
+import { GOption, GSelect } from '../../../../shared/components/g-select';
 import { Router } from '@angular/router';
+import { EimzoService } from '../../../../core/services/eimzo/eimzo';
+import { DatePipe } from '@angular/common';
+import { ESignKey } from '@shohrux_saidov/eimzo-client';
 
 @Component({
   selector: 'app-register-form',
-  imports: [ ReactiveFormsModule, GInput, GIcon, GButton, GOption, GSelect],
+  imports: [ReactiveFormsModule, GInput, GIcon, GButton, GOption, GSelect, DatePipe],
   templateUrl: './register-form.html',
   styleUrl: './register-form.scss',
 })
 export class RegisterForm implements OnInit {
+  eimzoService = inject(EimzoService);
   readonly eriControl = new FormControl('');
-
-  private dialog = inject(Dialog);
-
-  readonly eriKeys = [
-    {
-      id: '1',
-      name: "Nurmuhammad Sultonov Ozod o'g'li",
-      jshshir: '12345678901234',
-      date: '15.10.2029',
-    },
-    { id: '2', name: 'Eshmatov Toshmat', jshshir: '98765432109876', date: '10.05.2028' },
-  ];
-
   private fb = inject(NonNullableFormBuilder);
-  router=inject(Router)
+  router = inject(Router);
+
+  refreshEimzo() {
+    this.eimzoService.loadPfxKeys();
+  }
 
   registerForm = this.fb.group({
     eriKey: ['', Validators.required],
-    username: [{'value': '', disabled: true}, Validators.required],
-    password: [{'value': '', disabled: true}, Validators.required],
-    confirmPassword: [{'value': '', disabled: true}, Validators.required],
-    phone: [{value:'+998 ',disabled:true}, Validators.required],
+    username: [{ value: '', disabled: true }, Validators.required],
+    password: [{ value: '', disabled: true }, Validators.required],
+    confirmPassword: [{ value: '', disabled: true }, Validators.required],
+    phone: [{ value: '+998 ', disabled: true }, Validators.required],
   });
 
   getErrorMessage(constrolName: string) {
@@ -62,26 +55,26 @@ export class RegisterForm implements OnInit {
     return '';
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.refreshEimzo();
+  }
 
-  onSubmit() {
+  async onSubmit() {
     if (this.registerForm.valid) {
-      console.log(this.registerForm.value);
-      this.router.navigate(['/complete-register'])
-      
-      // const dialogRef = this.dialog.open(OtpModal, {
-      //   width: '100%',
-      //   maxWidth: '630px',
-      //   backdropClass: 'backdrop-blur-[4px]',
-      //   disableClose: true,
-      // });
-      // dialogRef.closed.subscribe((otpCode) => {
-      //   if (otpCode) {
-      //     console.log("Ro'yxatdan o'tish yakunlandi! Kiritilgan OTP:", otpCode);
-      //   } else {
-      //     console.log('Foydalanuvchi modalni yopib yubordi.');
-      //   }
-      // });
+      const selectedSerialNumber = this.registerForm.get('eriKey')?.value;
+      const selectedKey = this.eimzoService
+        .keys()
+        .find((k: ESignKey) => k.serialNumber === selectedSerialNumber);
+
+      if (selectedKey) {
+        try {
+          const hash = await this.eimzoService.signSimpleData(selectedKey, 'SUD_ID_TEST_LOGIN');
+          console.log('Muvaffaqiyatli imzolandi! Backendga yuboriladigan HASH:', hash);
+          // this.router.navigate(['/complete-register']);
+        } catch (error) {
+          alert('Imzolash jarayoni bekor qilindi yoki parol xato!');
+        }
+      }
     } else {
       this.registerForm.markAllAsTouched();
     }

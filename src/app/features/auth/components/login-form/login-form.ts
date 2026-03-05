@@ -1,45 +1,70 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { GOptionNew } from '../../../../shared/components/g-select-new/g-option-new';
-import { GSelectNew } from '../../../../shared/components/g-select-new/g-select-new';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { GIcon } from '../../../../shared/components/g-icon/g-icon';
 import GButton from '../../../../shared/components/g-button/g-button';
 import { GSelect, GOption } from '../../../../shared/components/g-select';
+import { EimzoService } from '../../../../core/services/eimzo/eimzo';
+import { ESignKey } from '@shohrux_saidov/eimzo-client';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-login-form',
   standalone: true,
-  imports: [ReactiveFormsModule, GIcon, GButton, GSelect, GOption],
+  imports: [ReactiveFormsModule, GIcon, GButton, GSelect, GOption, DatePipe],
   templateUrl: './login-form.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginForm {
-  readonly hasEimzo = signal<boolean>(false);
+export class LoginForm implements OnInit {
+  eimzoService = inject(EimzoService);
 
-  readonly eriControl = new FormControl('');
+  readonly eriControl = new FormControl('', Validators.required);
 
-  readonly eriKeys = [
-    {
-      id: '1',
-      name: "Nurmuhammad Sultonov Ozod o'g'li",
-      jshshir: '12345678901234',
-      date: '15.10.2029',
-    },
-    { id: '2', name: 'Eshmatov Toshmat', jshshir: '98765432109876', date: '10.05.2028' },
-  ];
+  ngOnInit() {
+    this.refreshEimzo();
+  }
 
   downloadEimzo() {
-    console.log("E-IMZO yuklab olish sahifasiga o'tish...");
+    window.open('https://e-imzo.uz/', '_blank');
   }
 
   refreshEimzo() {
     console.log('E-IMZO holati tekshirilmoqda...');
-    this.hasEimzo.set(true);
+    this.eimzoService.loadPfxKeys();
   }
 
-  onLogin() {
-    if (this.eriControl.value) {
-      console.log('Tizimga kirilmoqda. Tanlangan kalit ID:', this.eriControl.value);
+  getErrorMessage(constrolName: string) {
+    const control = this.eriControl;
+    if (control && control.invalid && (control.touched || control?.dirty)) {
+      if (control?.hasError('required')) {
+        return "Bu maydon to'ldirilishi shart";
+      }
+    }
+    return '';
+  }
+
+  async onLogin() {
+    if (this.eriControl.invalid) {
+      this.eriControl.markAsTouched();
+      return;
+    }
+
+    const selectedSerialNumber = this.eriControl.value;
+
+    if (selectedSerialNumber) {
+      const selectedKey = this.eimzoService
+        .keys()
+        .find((k: ESignKey) => k.serialNumber === selectedSerialNumber);
+
+      if (selectedKey) {
+        try {
+          const hash = await this.eimzoService.signSimpleData(selectedKey, 'SUD_ID_TEST_LOGIN');
+          console.log('Muvaffaqiyatli imzolandi! Backendga yuboriladigan HASH:', hash);
+        } catch (error) {
+          alert('Imzolash jarayoni bekor qilindi yoki parol xato!');
+        }
+      }
+    } else {
+      alert('Iltimos, ERI kalitini tanlang!');
     }
   }
 }
