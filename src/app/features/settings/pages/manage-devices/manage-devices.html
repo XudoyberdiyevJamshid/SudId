@@ -1,1 +1,149 @@
-<p>manage-devices works!</p>
+<g-card>
+  <div class="p-4 lg:p-6 block w-full relative">
+    <button
+      (click)="goBack()"
+      class="bg-[#F9F9F9] text-[#6B7D89] py-[0.625rem] text-[0.8125rem] px-3 rounded-lg flex items-center justify-center mb-3 gap-2 hover:bg-gray-100"
+    >
+      <g-icon name="chevron-right" color="#6B7D89" size="16"></g-icon>
+      <span>Orqaga</span>
+    </button>
+
+    <div class="mb-5 md:mb-8">
+      <h2 class="font-semibold text-xl md:text-2xl text-title mb-3">Qurilmalar</h2>
+
+      <div class="flex items-center flex-wrap gap-2 text-[13px] font-medium text-subtitle2">
+        <span class="hover:text-blue-500 cursor-pointer transition-colors" (click)="goBack()">
+          Sozlamalar
+        </span>
+        <g-icon name="chevron-left" size="10"></g-icon>
+        <span class="text-[#3FA2F6]">Qurilmalar</span>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-8 w-full">
+      <div class="flex flex-col gap-4">
+        <h2 class="text-[1.125rem] font-semibold text-title">Aktiv sessiyalar</h2>
+
+        <div class="flex flex-col gap-2">
+          @for (session of activeSession(); track session.id) {
+            <div
+              class="flex items-center justify-between p-3 border border-[#EEEEEE] rounded-xl hover:shadow-sm transition-shadow"
+            >
+              <div class="flex items-center gap-4">
+                <div
+                  class="w-11 h-11 rounded-lg bg-[#F9F9F9] flex items-center justify-center text-[#2C8CE6]"
+                >
+                  <g-icon [name]="session.type" size="20"></g-icon>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <span class="text-[12px] text-subtitle2">Qurilma nomi</span>
+                  <span class="text-[15px] font-medium text-title line-clamp-1">{{
+                    session.name
+                  }}</span>
+                </div>
+              </div>
+              <div class="hidden sm:flex flex-col gap-1">
+                <span class="text-[12px] text-subtitle2">So'nggi aktivlik</span>
+                <span class="text-[13px] font-medium text-title">{{ session.lastActive }}</span>
+              </div>
+
+              <div class="flex items-center shrink-0 ml-2">
+                <button
+                  (click)="openModal(session)"
+                  class="flex items-center gap-2 text-[13px] font-semibold text-[#FF4545] bg-[#F9F9F9] px-4 py-2 rounded-xl hover:bg-red-100 transition-colors"
+                >
+                  Yopish <g-icon name="x" size="14"></g-icon>
+                </button>
+              </div>
+            </div>
+          } @empty {
+            <app-no-data title="Aktiv sessiyalar topilmadi"></app-no-data>
+          }
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-4">
+        <h2 class="text-[1.125rem] font-semibold text-title">Boshqa qurilmalar</h2>
+
+        <div class="flex flex-col gap-2">
+          @for (session of otherSessions(); track session.id) {
+            <div
+              class="flex items-center justify-between p-3 border border-[#EEEEEE] rounded-xl hover:shadow-sm transition-shadow"
+            >
+              <div class="flex items-center gap-4">
+                <div
+                  class="w-11 h-11 rounded-lg bg-[#F9F9F9] flex items-center justify-center text-[#2C8CE6]"
+                >
+                  <g-icon [name]="session.type" color="#2C8CE6" size="20"></g-icon>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <span class="text-[12px] text-subtitle2">Qurilma nomi</span>
+                  <span class="text-[15px] font-medium text-title line-clamp-1">{{
+                    session.name
+                  }}</span>
+                </div>
+              </div>
+
+              <div class="hidden sm:flex flex-col gap-1">
+                <span class="text-[12px] text-subtitle2">So'nggi aktivlik</span>
+                <span class="text-[13px] font-medium text-title">{{ session.lastActive }}</span>
+              </div>
+              <div class="flex items-center shrink-0 ml-2">
+                <button
+                  (click)="openModal(session)"
+                  class="flex items-center gap-2 text-[13px] font-semibold text-subtitle2 bg-gray-50 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors"
+                >
+                  Yopish <g-icon name="x" size="16"></g-icon>
+                </button>
+              </div>
+            </div>
+          } @empty {
+            <app-no-data title="Malumot topilmadi"></app-no-data>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</g-card>
+
+@if (isModalOpen()) {
+  <div
+    class="fixed inset-0 bg-[#1E293B]/40 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+  >
+    <div
+      class="bg-white rounded-[24px] p-6 md:p-8 w-full max-w-[480px] shadow-2xl relative animate-fade-in-up"
+    >
+      <h2 class="text-xl font-semibold text-title mb-3">E'tiborli bo'ling!</h2>
+      <p class="text-[15px] text-subtitle2 mb-6">Haqiqatdan ham bu sessiyani yopmoqchimiz?</p>
+
+      @if (selectedSession()) {
+        <div class="flex items-center gap-4 bg-[#F9F9F9] p-3 rounded-xl mb-6">
+          <div
+            class="w-11 h-11 bg-white rounded-lg shadow-sm flex items-center justify-center text-[#2C8CE6]"
+          >
+            <g-icon [name]="selectedSession()?.type || 'laptop'" size="20"></g-icon>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-[12px] text-subtitle2">Qurilma nomi</span>
+            <span class="text-[15px] font-medium text-title">{{ selectedSession()?.name }}</span>
+          </div>
+        </div>
+      }
+
+      <div class="flex flex-col sm:flex-row gap-4 w-full">
+        <button
+          (click)="confirmCloseSession()"
+          class="flex-1 bg-[#FF4D4F] hover:bg-[#E63E40] text-white font-medium py-[1.125rem] rounded-xl transition-colors outline-none"
+        >
+          Ha
+        </button>
+        <button
+          (click)="closeModal()"
+          class="flex-1 bg-[#F9F9F9] hover:bg-gray-100 text-[#2C8CE6] font-medium py-[1.125rem] rounded-xl transition-colors outline-none"
+        >
+          Yo'q, yopmaymiz
+        </button>
+      </div>
+    </div>
+  </div>
+}
