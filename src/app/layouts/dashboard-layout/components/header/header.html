@@ -1,12 +1,18 @@
 <div class="bg-white py-5">
   <div class="g-container flex justify-between items-center">
     <div class="flex items-center">
-      <img src="../../../../../assets/images/logo-blue.png" width="78" height="48" alt="log" />
+      <img
+        src="assets/icons/logo-blue.svg"
+        width="78"
+        height="48"
+        alt="log"
+        [routerLink]="['/dashboard']"
+      />
     </div>
 
     <div class="flex items-center gap-4">
       <div class="flex items-center gap-2">
-        <div class="bg-[#F9F9F9] rounded-lg z-10">
+        <!-- <div class="bg-[#F9F9F9] rounded-lg z-10">
           <button
             class="flex items-center gap-1.5 md:gap-2 px-3 md:px-4 py-1.5 md:py-2 text-xs md:text-sm font-medium text-gray-600 hover:bg-gray-50 rounded-lg transition-colors border border-transparent hover:border-gray-200"
           >
@@ -19,7 +25,8 @@
               color="#9CA3AF"
             ></g-icon>
           </button>
-        </div>
+        </div> -->
+        <app-switch-language></app-switch-language>
         <div
           class="w-12 h-12 flex items-center justify-center rounded-xl cursor-pointer bg-[#F9F9F9]"
         >

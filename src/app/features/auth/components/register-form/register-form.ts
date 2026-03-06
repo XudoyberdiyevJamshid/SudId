@@ -17,7 +17,7 @@ import { ESignKey } from '@shohrux_saidov/eimzo-client';
 
 @Component({
   selector: 'app-register-form',
-  imports: [ReactiveFormsModule, GInput, GIcon, GButton, GOption, GSelect, DatePipe],
+  imports: [ReactiveFormsModule, GIcon, GButton, GOption, GSelect, DatePipe],
   templateUrl: './register-form.html',
   styleUrl: './register-form.scss',
 })
@@ -33,10 +33,10 @@ export class RegisterForm implements OnInit {
 
   registerForm = this.fb.group({
     eriKey: ['', Validators.required],
-    username: [{ value: '', disabled: true }, Validators.required],
-    password: [{ value: '', disabled: true }, Validators.required],
-    confirmPassword: [{ value: '', disabled: true }, Validators.required],
-    phone: [{ value: '+998 ', disabled: true }, Validators.required],
+    // username: [{ value: '', disabled: true }, Validators.required],
+    // password: [{ value: '', disabled: true }, Validators.required],
+    // confirmPassword: [{ value: '', disabled: true }, Validators.required],
+    // phone: [{ value: '+998 ', disabled: true }, Validators.required],
   });
 
   getErrorMessage(constrolName: string) {
@@ -45,12 +45,12 @@ export class RegisterForm implements OnInit {
       if (control?.hasError('required')) {
         return "Bu maydon to'ldirilishi shart";
       }
-      if (control.hasError('minlength')) {
-        return `Kamida ${control.errors?.['minlength'].requiredLength} tab belgi kirting `;
-      }
-      if (control.hasError('passwordMismatch')) {
-        return 'Parollar mos kelmadi';
-      }
+      // if (control.hasError('minlength')) {
+      //   return `Kamida ${control.errors?.['minlength'].requiredLength} tab belgi kirting `;
+      // }
+      // if (control.hasError('passwordMismatch')) {
+      //   return 'Parollar mos kelmadi';
+      // }
     }
     return '';
   }
@@ -68,9 +68,16 @@ export class RegisterForm implements OnInit {
 
       if (selectedKey) {
         try {
-          const hash = await this.eimzoService.signSimpleData(selectedKey, 'SUD_ID_TEST_LOGIN');
-          console.log('Muvaffaqiyatli imzolandi! Backendga yuboriladigan HASH:', hash);
-          // this.router.navigate(['/complete-register']);
+          const hash = await this.eimzoService.signSimpleData(selectedKey, 'SUD_ID_REGISTER_FLOW');
+
+          this.router.navigate(['/complete-register'], {
+            state: {
+              pinfl: selectedKey.PINFL,
+              hash: hash,
+            },
+          });
+          // console.log('Muvaffaqiyatli imzolandi! Backendga yuboriladigan HASH:', hash);
+          // // this.router.navigate(['/complete-register']);
         } catch (error) {
           alert('Imzolash jarayoni bekor qilindi yoki parol xato!');
         }
@@ -78,5 +85,11 @@ export class RegisterForm implements OnInit {
     } else {
       this.registerForm.markAllAsTouched();
     }
+  }
+
+  refresh() {
+    this.registerForm.get('eriKey')?.setValue('');
+    this.registerForm.markAsUntouched();
+    this.refreshEimzo();
   }
 }

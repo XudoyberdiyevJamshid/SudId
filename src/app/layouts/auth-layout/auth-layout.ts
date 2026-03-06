@@ -1,7 +1,6 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, RouterLinkWithHref } from '@angular/router';
 import { GIcon } from '../../shared/components/g-icon/g-icon';
-import GButton from '../../shared/components/g-button/g-button';
 
 interface AuthSlide {
   image: string;
@@ -11,7 +10,7 @@ interface AuthSlide {
 
 @Component({
   selector: 'app-auth-layout',
-  imports: [RouterOutlet, GIcon, GButton],
+  imports: [RouterOutlet, GIcon, RouterLinkWithHref],
   templateUrl: './auth-layout.html',
   styleUrl: './auth-layout.scss',
 })

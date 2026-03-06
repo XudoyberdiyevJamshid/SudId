@@ -1,0 +1,39 @@
+<div class="relative inline-block text-left">
+  <button
+    (click)="toggle()"
+    class="flex items-center gap-2 px-3 py-2 bg-[#F9F9FA] hover:bg-gray-100 rounded-lg transition-colors duration-200 cursor-pointer border border-transparent outline-none"
+  >
+    <g-icon name="globus" color="#2C8CE6" size="20"></g-icon>
+    <span class="text-[#8196A3] font-medium text-[15px] select-none">
+      {{ currentLangLabel() }}
+    </span>
+    <g-icon
+      name="chevron-down"
+      color="#8196A3"
+      size="16"
+      class="transition-transform duration-200"
+      [class.rotate-180]="isOpen()"
+    >
+    </g-icon>
+  </button>
+
+  @if (isOpen()) {
+    <div
+      class="absolute right-0 mt-2 w-36 bg-white rounded-xl shadow-lg ring-1 ring-black ring-opacity-5 z-50 overflow-hidden"
+    >
+      <div class="py-1 flex flex-col">
+        @for (lang of languages; track lang.code) {
+          <button
+            (click)="selectLang(lang.code)"
+            class="px-4 py-2.5 text-left text-sm hover:bg-gray-50 transition-colors"
+            [class.bg-blue-50]="lang.code === currentLangCode()"
+            [class.text-blue-600]="lang.code === currentLangCode()"
+            [class.text-gray-700]="lang.code !== currentLangCode()"
+          >
+            {{ lang.label }}
+          </button>
+        }
+      </div>
+    </div>
+  }
+</div>

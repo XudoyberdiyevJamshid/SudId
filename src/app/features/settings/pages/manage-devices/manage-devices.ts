@@ -1,8 +1,9 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { GIcon } from '../../../../shared/components/g-icon/g-icon';
 import { GCard } from '../../../../shared/components/g-card/g-card';
 import { NoData } from '../../../../shared/ui/no-data/no-data';
+import { DeviceSessionService } from '../../../../core/services/device/device.service';
 
 export interface Session {
   id: string;
@@ -18,8 +19,9 @@ export interface Session {
   templateUrl: './manage-devices.html',
   styleUrl: './manage-devices.scss',
 })
-export class ManageDevices {
+export class ManageDevices implements OnInit {
   router = inject(Router);
+  deviceSessionService = inject(DeviceSessionService);
 
   allSessions = signal<Session[]>([
     { id: '1', type: 'laptop', name: 'PC-Windows-11', lastActive: '15.10.2025', isCurrent: true },
@@ -61,4 +63,17 @@ export class ManageDevices {
     }
     this.closeModal();
   }
+
+  handeleData() {
+    this.deviceSessionService.getAllSessions('userid').subscribe({
+      next: (response: any) => {
+        const data = response?.data || response;
+        this.allSessions.set(data);
+      },
+      error: (err) => {
+        console.error('Sessiyalarni yuklashda xato:', err);
+      },
+    });
+  }
+  ngOnInit(): void {}
 }

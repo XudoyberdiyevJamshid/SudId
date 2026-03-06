@@ -58,7 +58,13 @@
     </div>
   </g-button>
 
-  <g-button variant="secondary" [fullWidth]="true" rounded="sm" customClass="mt-4">
+  <g-button
+    variant="secondary"
+    [fullWidth]="true"
+    rounded="sm"
+    customClass="mt-4"
+    (click)="refresh()"
+  >
     <g-icon name="refresh-icon" size="16"></g-icon>
     Yangilash
   </g-button>
