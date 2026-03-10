@@ -156,7 +156,13 @@
 
         <div class="flex justify-center md:justify-end mt-2 md:mt-4">
           <div class="w-full md:w-[22.375rem]">
-            <g-button type="submit" [fullWidth]="true" rounded="sm" size="md">
+            <g-button
+              type="submit"
+              [fullWidth]="true"
+              rounded="sm"
+              size="md"
+              [loading]="isSaving()"
+            >
               Tasdiqlash
               <div
                 class="w-6 h-6 md:w-7 md:h-7 rounded-full flex justify-center items-center absolute right-4 md:right-5 bg-white/20"

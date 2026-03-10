@@ -6,6 +6,7 @@ import { GSelect, GOption } from '../../../../shared/components/g-select';
 import { EimzoService } from '../../../../core/services/eimzo/eimzo';
 import { ESignKey } from '@shohrux_saidov/eimzo-client';
 import { DatePipe } from '@angular/common';
+import { AuthService } from '../../../../core/services/auth/auth.service';
 
 @Component({
   selector: 'app-login-form',
@@ -16,7 +17,7 @@ import { DatePipe } from '@angular/common';
 })
 export class LoginForm implements OnInit {
   eimzoService = inject(EimzoService);
-
+  authService = inject(AuthService);
   readonly eriControl = new FormControl('', Validators.required);
 
   ngOnInit() {
@@ -28,7 +29,6 @@ export class LoginForm implements OnInit {
   }
 
   refreshEimzo() {
-    console.log('E-IMZO holati tekshirilmoqda...');
     this.eimzoService.loadPfxKeys();
   }
 
@@ -58,7 +58,14 @@ export class LoginForm implements OnInit {
       if (selectedKey) {
         try {
           const hash = await this.eimzoService.signSimpleData(selectedKey, 'SUD_ID_TEST_LOGIN');
-          console.log('Muvaffaqiyatli imzolandi! Backendga yuboriladigan HASH:', hash);
+          this.authService.loginWithEimzo(hash, selectedKey.PINFL).subscribe({
+            next(value) {
+              console.log(value);
+            },
+            error(err) {
+              console.log(err);
+            },
+          });
         } catch (error) {
           alert('Imzolash jarayoni bekor qilindi yoki parol xato!');
         }

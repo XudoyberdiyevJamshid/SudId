@@ -1,11 +1,11 @@
 import { Component, ElementRef, HostListener, inject, signal } from '@angular/core';
-import { GSelect } from '../../../shared/components/g-select';
+
 import { GIcon } from '../../../shared/components/g-icon/g-icon';
 import { LanguageService } from '../../../core/services/language/language';
 
 @Component({
   selector: 'app-switch-language',
-  imports: [GSelect, GIcon],
+  imports: [GIcon],
   templateUrl: './switch-language.html',
   styleUrl: './switch-language.scss',
 })

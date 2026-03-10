@@ -3,27 +3,22 @@ import { Router, RouterLink } from '@angular/router';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { GIcon } from '../../../../shared/components/g-icon/g-icon';
 import GButton from '../../../../shared/components/g-button/g-button';
-import { GOption, GSelect } from '../../../../shared/components/g-select';
+
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { GInput } from '../../../../shared/components/g-input/g-input';
 import { SwitchLanguage } from '../../../../layouts/components/switch-language/switch-language';
+import { OAuthService } from 'angular-oauth2-oidc';
 
 @Component({
   selector: 'app-complete-register',
-  imports: [
-    GIcon,
-    GButton,
-    GSelect,
-    GOption,
-    ReactiveFormsModule,
-    GInput,
-    RouterLink,
-    SwitchLanguage,
-  ],
+  standalone: true,
+  imports: [GIcon, GButton, ReactiveFormsModule, GInput, RouterLink, SwitchLanguage],
   templateUrl: './complete-register.html',
   styleUrl: './complete-register.scss',
 })
 export class CompleteRegister implements OnInit {
+  private oauthService = inject(OAuthService);
+
   private fb = inject(FormBuilder);
   router = inject(Router);
   userService = inject(UserService);
@@ -128,7 +123,6 @@ export class CompleteRegister implements OnInit {
 
   onSubmit() {
     if (this.registerForm.valid) {
-      console.log(78787);
       this.isSaving.set(true);
       const formData = this.registerForm.getRawValue();
       const payload = {
@@ -140,18 +134,17 @@ export class CompleteRegister implements OnInit {
       this.userService.saveUser(payload).subscribe({
         next: (response) => {
           console.log('Muvaffaqiyatli saqlandi!', response);
-          this.isSaving.set(true);
+          this.isSaving.set(false);
+          this.oauthService.initCodeFlow();
           // this.router.navigate(['/login']);
         },
         error: (err) => {
           console.error("Ro'yxatdan o'tishda xato:", err);
-          this.isSaving.set(true);
+          this.isSaving.set(false);
           console.error(err);
         },
       });
     } else {
-      console.log(787);
-
       this.registerForm.markAllAsTouched();
     }
   }
