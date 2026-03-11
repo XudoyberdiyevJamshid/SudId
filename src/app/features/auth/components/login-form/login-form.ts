@@ -7,6 +7,7 @@ import { EimzoService } from '../../../../core/services/eimzo/eimzo';
 import { ESignKey } from '@shohrux_saidov/eimzo-client';
 import { DatePipe } from '@angular/common';
 import { AuthService } from '../../../../core/services/auth/auth.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-login-form',
@@ -57,7 +58,14 @@ export class LoginForm implements OnInit {
 
       if (selectedKey) {
         try {
-          const hash = await this.eimzoService.signSimpleData(selectedKey, 'SUD_ID_TEST_LOGIN');
+          const challlengeRes: any = await firstValueFrom(this.authService.getEimzoChallange());
+          const challengeText = challlengeRes?.data || challlengeRes?.challenge;
+
+          if (!challengeText) {
+            throw new Error('Backenddan Challenge kelmadi!');
+          }
+
+          const hash = await this.eimzoService.signSimpleData(selectedKey, challengeText);
           this.authService.loginWithEimzo(hash, selectedKey.PINFL).subscribe({
             next(value) {
               console.log(value);

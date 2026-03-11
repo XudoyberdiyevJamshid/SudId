@@ -14,6 +14,8 @@ import { Router } from '@angular/router';
 import { EimzoService } from '../../../../core/services/eimzo/eimzo';
 import { DatePipe } from '@angular/common';
 import { ESignKey } from '@shohrux_saidov/eimzo-client';
+import { firstValueFrom } from 'rxjs';
+import { AuthService } from '../../../../core/services/auth/auth.service';
 
 @Component({
   selector: 'app-register-form',
@@ -25,6 +27,7 @@ export class RegisterForm implements OnInit {
   eimzoService = inject(EimzoService);
   readonly eriControl = new FormControl('');
   private fb = inject(NonNullableFormBuilder);
+  authService = inject(AuthService);
   router = inject(Router);
 
   refreshEimzo() {
@@ -68,7 +71,14 @@ export class RegisterForm implements OnInit {
 
       if (selectedKey) {
         try {
-          const hash = await this.eimzoService.signSimpleData(selectedKey, 'SUD_ID_REGISTER_FLOW');
+          const challlengeRes: any = await firstValueFrom(this.authService.getEimzoChallange());
+          const challengeText = challlengeRes?.data || challlengeRes?.challenge;
+
+          if (!challengeText) {
+            throw new Error('Backenddan Challenge kelmadi!');
+          }
+
+          const hash = await this.eimzoService.signSimpleData(selectedKey, challengeText);
 
           this.router.navigate(['/complete-register'], {
             state: {

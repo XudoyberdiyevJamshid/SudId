@@ -3,11 +3,11 @@ import { Router, RouterLink } from '@angular/router';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { GIcon } from '../../../../shared/components/g-icon/g-icon';
 import GButton from '../../../../shared/components/g-button/g-button';
-
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { GInput } from '../../../../shared/components/g-input/g-input';
 import { SwitchLanguage } from '../../../../layouts/components/switch-language/switch-language';
 import { OAuthService } from 'angular-oauth2-oidc';
+import { authConfig } from '../../../../core/auth/auth.config';
 
 @Component({
   selector: 'app-complete-register',
@@ -34,7 +34,7 @@ export class CompleteRegister implements OnInit {
     phone: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
 
-    pnfl: [{ value: '', disabled: true }],
+    pnfl: [{ value: '', disabled: false }],
     lastName: [{ value: '', disabled: true }],
     firstName: [{ value: '', disabled: true }],
     middleName: [{ value: '', disabled: true }],
@@ -133,15 +133,15 @@ export class CompleteRegister implements OnInit {
 
       this.userService.saveUser(payload).subscribe({
         next: (response) => {
-          console.log('Muvaffaqiyatli saqlandi!', response);
           this.isSaving.set(false);
+
+          this.oauthService.configure(authConfig);
+
           this.oauthService.initCodeFlow();
-          // this.router.navigate(['/login']);
         },
         error: (err) => {
           console.error("Ro'yxatdan o'tishda xato:", err);
           this.isSaving.set(false);
-          console.error(err);
         },
       });
     } else {

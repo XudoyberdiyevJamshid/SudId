@@ -32,10 +32,13 @@ export class AuthService {
   }
 
   getEimzoChallange() {
-    return this.http.get(`${environment.apiUrl}/auth/eimzo-challeng`);
+    return this.http.get(`${environment.apiUrl}/auth/eimzo-challenge`);
   }
 
   loginWithEimzo(pkcs7_hash: string, pin: string) {
-    return this.http.post(`${environment.apiUrl}/auth/by-eimzo`, { pkcs7: pkcs7_hash, pin: pin });
+    return this.http.post(`${environment.apiUrl}/auth/by-eimzo`, {
+      pkcs7b64: pkcs7_hash,
+      pin: pin,
+    });
   }
 }
