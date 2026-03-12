@@ -10,7 +10,12 @@ export const authGuard: CanActivateFn = (route, state) => {
     return true;
   }
 
-  router.navigate(['/login']);
+  const clientId = '1';
+  const redirectUri = encodeURIComponent('http://localhost:4200/login');
+  const authUrl = `http://localhost:9000/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&scope=openid%20profile`;
+
+  // 3. Tashqi URL ga yo'naltirish (GET so'rovi avtomatik bajariladi)
+  window.location.href = authUrl;
 
   return false;
 };
