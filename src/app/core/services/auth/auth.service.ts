@@ -1,7 +1,7 @@
-import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
-import { environment } from '../../../../environments/environment';
+import {Router} from '@angular/router';
+import {HttpClient} from '@angular/common/http';
+import {inject, Injectable, signal} from '@angular/core';
+import {environment} from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -32,13 +32,19 @@ export class AuthService {
   }
 
   getEimzoChallange() {
-    return this.http.get(`${environment.apiUrl}/auth/eimzo-challenge`);
+    return this.http.get(`${environment.apiUrl}/auth/eimzo-challenge`,
+      {
+        withCredentials: true
+      });
   }
 
   loginWithEimzo(pkcs7_hash: string, pin: string) {
     return this.http.post(`${environment.apiUrl}/auth/by-eimzo`, {
-      pkcs7b64: pkcs7_hash,
-      pin: pin,
-    });
+        pkcs7b64: pkcs7_hash,
+        pin: pin
+      },
+      {
+        withCredentials: true
+      });
   }
 }

@@ -1,7 +1,7 @@
-import { Component, signal } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { LoginForm } from '../../components/login-form/login-form';
-import { RegisterForm } from '../../components/register-form/register-form';
+import {Component, OnInit, signal} from '@angular/core';
+import {FormControl} from '@angular/forms';
+import {LoginForm} from '../../components/login-form/login-form';
+import {RegisterForm} from '../../components/register-form/register-form';
 
 type tab = 'login' | 'register';
 
@@ -21,4 +21,5 @@ export class Login {
   switchTab(tab: tab): void {
     this.currentTab.set(tab);
   }
+
 }

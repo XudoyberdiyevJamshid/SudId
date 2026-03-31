@@ -75,6 +75,7 @@ export class LoginForm implements OnInit {
             },
           });
         } catch (error) {
+          console.log(error);
           alert('Imzolash jarayoni bekor qilindi yoki parol xato!');
         }
       }

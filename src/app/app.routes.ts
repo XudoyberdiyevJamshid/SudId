@@ -1,18 +1,15 @@
-import { Routes } from '@angular/router';
-import { AuthLayout } from './layouts/auth-layout/auth-layout';
+import {Routes} from '@angular/router';
+import {AuthLayout} from './layouts/auth-layout/auth-layout';
+import {oauth2Guard} from './core/guards/auth/auth-guard';
 
 export const routes: Routes = [
   {
-    path: '',
+    path: 'login',
     component: AuthLayout,
+    // canActivate: [oauth2Guard],
     children: [
       {
         path: '',
-        redirectTo: 'login',
-        pathMatch: 'full',
-      },
-      {
-        path: 'login',
         loadComponent: () => import('../app/features/auth/pages/login/login').then((m) => m.Login),
       },
     ],
@@ -86,4 +83,10 @@ export const routes: Routes = [
       },
     ],
   },
+  {
+    path: '',
+    canActivate: [oauth2Guard],
+    loadComponent: () =>
+      import('../app/layouts/dashboard-layout/dashboard-layout').then((m) => m.DashboardLayout),
+  }
 ];
