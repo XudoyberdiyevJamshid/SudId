@@ -6,8 +6,7 @@ import GButton from '../../../../shared/components/g-button/g-button';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { GInput } from '../../../../shared/components/g-input/g-input';
 import { SwitchLanguage } from '../../../../layouts/components/switch-language/switch-language';
-import { OAuthService } from 'angular-oauth2-oidc';
-import { authConfig } from '../../../../core/auth/auth.config';
+import { ToastService } from '../../../../core/services/toast/toast.service';
 
 @Component({
   selector: 'app-complete-register',
@@ -17,15 +16,15 @@ import { authConfig } from '../../../../core/auth/auth.config';
   styleUrl: './complete-register.scss',
 })
 export class CompleteRegister implements OnInit {
-  private oauthService = inject(OAuthService);
-
   private fb = inject(FormBuilder);
   router = inject(Router);
   userService = inject(UserService);
+  toastService = inject(ToastService);
   private userPhotoBase64: string = '';
 
   isFetching = signal<boolean>(false);
   isSaving = signal<boolean>(false);
+  private eimzoHash: string = '';
 
   registerForm = this.fb.group({
     citizenship: [{ value: '', disabled: true }],
@@ -54,9 +53,10 @@ export class CompleteRegister implements OnInit {
   ngOnInit(): void {
     const state = history.state;
     if (state && state.pinfl) {
+      this.eimzoHash = state.hash ?? '';
       this.fetchPersonInfo(state.pinfl);
     } else {
-      this.router.navigate(['/register']);
+      this.router.navigate(['/login']);
     }
   }
 
@@ -102,7 +102,7 @@ export class CompleteRegister implements OnInit {
         this.isFetching.set(false);
       },
       error: (err) => {
-        console.error("Pasport ma'lumotlarini olishda xatolik:", err);
+        this.toastService.error("Pasport ma'lumotlarini olishda xatolik");
         this.isFetching.set(false);
       },
     });
@@ -129,18 +129,19 @@ export class CompleteRegister implements OnInit {
         ...formData,
         image_b64: this.userPhotoBase64,
         lang: 'UZ_LAT',
+        pkcs7b64: this.eimzoHash,
       };
 
       this.userService.saveUser(payload).subscribe({
         next: (response) => {
           this.isSaving.set(false);
 
-          this.oauthService.configure(authConfig);
-
-          this.oauthService.initCodeFlow();
+          const clientId = '1';
+          const redirectUri = encodeURIComponent('http://localhost:4200/login');
+          window.location.href = `http://localhost:9000/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&scope=openid%20profile`;
         },
         error: (err) => {
-          console.error("Ro'yxatdan o'tishda xato:", err);
+          this.toastService.error("Ro'yxatdan o'tishda xato yuz berdi");
           this.isSaving.set(false);
         },
       });

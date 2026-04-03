@@ -16,6 +16,7 @@ import { DatePipe } from '@angular/common';
 import { ESignKey } from '@shohrux_saidov/eimzo-client';
 import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../../../../core/services/auth/auth.service';
+import { ToastService } from '../../../../core/services/toast/toast.service';
 
 @Component({
   selector: 'app-register-form',
@@ -28,6 +29,7 @@ export class RegisterForm implements OnInit {
   readonly eriControl = new FormControl('');
   private fb = inject(NonNullableFormBuilder);
   authService = inject(AuthService);
+  toastService = inject(ToastService);
   router = inject(Router);
 
   refreshEimzo() {
@@ -89,7 +91,7 @@ export class RegisterForm implements OnInit {
           // console.log('Muvaffaqiyatli imzolandi! Backendga yuboriladigan HASH:', hash);
           // // this.router.navigate(['/complete-register']);
         } catch (error) {
-          alert('Imzolash jarayoni bekor qilindi yoki parol xato!');
+          this.toastService.error('Imzolash jarayoni bekor qilindi yoki parol xato!');
         }
       }
     } else {

@@ -7,6 +7,7 @@ import { EimzoService } from '../../../../core/services/eimzo/eimzo';
 import { ESignKey } from '@shohrux_saidov/eimzo-client';
 import { DatePipe } from '@angular/common';
 import { AuthService } from '../../../../core/services/auth/auth.service';
+import { ToastService } from '../../../../core/services/toast/toast.service';
 import { firstValueFrom } from 'rxjs';
 
 @Component({
@@ -19,6 +20,7 @@ import { firstValueFrom } from 'rxjs';
 export class LoginForm implements OnInit {
   eimzoService = inject(EimzoService);
   authService = inject(AuthService);
+  toastService = inject(ToastService);
   readonly eriControl = new FormControl('', Validators.required);
 
   ngOnInit() {
@@ -67,20 +69,24 @@ export class LoginForm implements OnInit {
 
           const hash = await this.eimzoService.signSimpleData(selectedKey, challengeText);
           this.authService.loginWithEimzo(hash, selectedKey.PINFL).subscribe({
-            next(value) {
-              console.log(value);
+            next: (response: any) => {
+              const url = response?.data?.redirect_url;
+              if (url) {
+                window.location.href = url;
+              } else {
+                this.toastService.error('Redirect URL topilmadi');
+              }
             },
-            error(err) {
-              console.log(err);
+            error: () => {
+              this.toastService.error('Login xatosi yuz berdi. Qayta urinib ko\'ring.');
             },
           });
         } catch (error) {
-          console.log(error);
-          alert('Imzolash jarayoni bekor qilindi yoki parol xato!');
+          this.toastService.error('Imzolash jarayoni bekor qilindi yoki parol xato!');
         }
       }
     } else {
-      alert('Iltimos, ERI kalitini tanlang!');
+      this.toastService.warning('Iltimos, ERI kalitini tanlang!');
     }
   }
 }

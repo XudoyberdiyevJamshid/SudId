@@ -23,6 +23,7 @@
   "private": true,
   "packageManager": "npm@10.8.2",
   "dependencies": {
+    "@angular/animations": "^21.2.7",
     "@angular/cdk": "^21.2.0",
     "@angular/common": "^21.1.0",
     "@angular/compiler": "^21.1.0",
@@ -32,6 +33,7 @@
     "@angular/router": "^21.1.0",
     "@shohrux_saidov/eimzo-client": "^0.0.10",
     "angular-oauth2-oidc": "^20.0.2",
+    "ngx-toastr": "^20.0.5",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },

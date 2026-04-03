@@ -44,8 +44,42 @@
           <br />
           <span class="text-subtitle text-xs">nurmuhammad.sultonov</span>
         </p>
-        <g-icon name="log-out" class="ml-2 cursor-pointer" color="#8196A3" size="16"></g-icon>
+        <g-icon
+          name="log-out"
+          (click)="showLogoutModal.set(true)"
+          class="ml-2 cursor-pointer"
+          color="#8196A3"
+          size="16"
+        ></g-icon>
       </div>
     </div>
   </div>
 </div>
+
+@if (showLogoutModal()) {
+  <div
+    class="fixed inset-0 bg-[#1E293B]/40 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+  >
+    <div
+      class="bg-white rounded-[24px] p-6 md:p-8 w-full max-w-[480px] shadow-2xl relative"
+    >
+      <h2 class="text-xl font-semibold text-title mb-3">E'tiborli bo'ling!</h2>
+      <p class="text-[15px] text-subtitle2 mb-6">Haqiqatan ham tizimdan chiqmoqchimisiz?</p>
+
+      <div class="flex flex-col sm:flex-row gap-4 w-full">
+        <button
+          (click)="confirmLogout()"
+          class="flex-1 bg-[#FF4D4F] hover:bg-[#E63E40] text-white font-medium py-[1.125rem] rounded-xl transition-colors outline-none"
+        >
+          Ha
+        </button>
+        <button
+          (click)="showLogoutModal.set(false)"
+          class="flex-1 bg-[#F9F9F9] hover:bg-gray-100 text-[#2C8CE6] font-medium py-[1.125rem] rounded-xl transition-colors outline-none"
+        >
+          Yo'q, qolaman
+        </button>
+      </div>
+    </div>
+  </div>
+}

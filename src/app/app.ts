@@ -1,14 +1,24 @@
-import { Component, signal } from '@angular/core';
+import { Component, DOCUMENT, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import GButton from './shared/components/g-button/g-button';
-import {GInput} from './shared/components/g-input/g-input';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, GButton, GInput,],
+  imports: [RouterOutlet],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  styleUrl: './app.scss',
 })
 export class App {
   protected readonly title = signal('sud-id');
+  private document = inject(DOCUMENT);
+  ngAfterViewInit(): void {
+    const preloader = this.document.getElementById('fuse-splash-screen');
+
+    if (preloader) {
+      preloader.classList.add('fuse-splash-screen-hidden');
+
+      setTimeout(() => {
+        preloader.remove();
+      }, 500);
+    }
+  }
 }
